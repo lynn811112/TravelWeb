@@ -1,6 +1,12 @@
 package dao;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,22 +17,22 @@ import util.DBConnection;
 
 public class CommentDAO implements DAO<Comment> {
 
-	private static final String SELECT_ALL_SQL = "SELECT * FROM travel_web";
-	private static final String SELECT_ONE_SQL = "SELECT * FROM travel_web WHERE com_id = ?";
-//	private static final String INSERT_SQL = "INSERT INTO travel_web VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-//	private static final String UPDATE_SQL = "UPDATE travel_web SET district=?, address=?, land_area=?, total_area=?,inter_area=?, park_area=?, type=?, usage=?, structure=?, complete_date=?   WHERE re_id = ?;";
-//	private static final String DELETE_SQL = "DELETE travel_web WHERE com_id = ?";
+	private static final String SELECT_ALL_SQL = "SELECT * FROM comments";
+	private static final String SELECT_ONE_SQL = "SELECT * FROM comments WHERE com_id = ?";
+	private static final String INSERT_SQL = "INSERT INTO comments VALUES (?,?,?,?,?,?)";
+	private static final String UPDATE_SQL = "UPDATE travel_web SET district=?, address=?, land_area=?, total_area=?,inter_area=?, park_area=?, type=?, usage=?, structure=?, complete_date=?   WHERE re_id = ?;";
+	private static final String DELETE_SQL = "DELETE travel_web WHERE com_id = ?";
 
 	@Override
 	public List<Comment> getAll() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Comment getOne(int id) {
 		Connection connection = null;
-		Comment comment = null;
+		Comment comment = new Comment();
 		try {
 			connection = DBConnection.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ONE_SQL);
@@ -35,14 +41,30 @@ public class CommentDAO implements DAO<Comment> {
 			while (resultSet.next()) {
 				comment.setComId(resultSet.getInt("com_id"));
 				comment.setObjectTb(resultSet.getString("object_tb"));
+				System.out.println(comment.getObjectTb());
 				comment.setObjectId(resultSet.getInt("object_id"));
 				comment.setUserId(resultSet.getInt("user_id"));
 				comment.setCom_date(resultSet.getDate("com_date"));
 				comment.setRate(resultSet.getInt("rate"));
 				comment.setContent(resultSet.getString("content"));
-				comment.setImages(resultSet.getBytes("images"));
-			}
+				FileOutputStream fos = new FileOutputStream("C:\\iSpan\\Code\\TravelWeb\\ref\\friends-min2.jpg");
 
+				Blob blob = resultSet.getBlob("image");
+				byte[] data = blob.getBytes(1, (int) blob.length());
+				comment.setImages(data);
+				fos.write(data);
+				fos.close();
+				System.out.println("File output is successful!");
+
+
+			}
+			resultSet.close();
+			preparedStatement.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -53,9 +75,44 @@ public class CommentDAO implements DAO<Comment> {
 
 	@Override
 	public boolean insert(Comment comment) {
-		// TODO Auto-generated method stub
 		Connection connection = null;
-		return false;
+		boolean dataInserted = false; // 資料尚未insert前，此布林值為false
+		try {
+			connection = DBConnection.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL);
+
+			// 未設定Comment Model，直接給予值的方式
+			preparedStatement.setString(1, "Hotel");
+			preparedStatement.setInt(2, 2);
+			preparedStatement.setInt(3, 3);
+			preparedStatement.setString(4, "2022/6/6");
+			preparedStatement.setInt(5, 5);
+			preparedStatement.setString(6, "Amazing Place to stay!");
+
+			// 前端
+//			preparedStatement.setString(1, comment.getObjectTb());
+//			preparedStatement.setInt(2, comment.getObjectId());
+//			preparedStatement.setInt(3, comment.getUserId());
+//			preparedStatement.setDate(4, (Date) comment.getCom_date());
+//			preparedStatement.setInt(5, comment.getRate());
+//			preparedStatement.setString(6, comment.getContent());
+//			preparedStatement.setBinaryStream(7, comment.getImages());	
+
+//			FileInputStream fileInputStream = new FileInputStream("C:\\iSpan\\Code\\TravelWeb\\ref\\friends-min.jpg");
+//			preparedStatement.setBinaryStream(7, fileInputStream);
+			int count = preparedStatement.executeUpdate();
+			if (count > 0) {
+				System.out.println("Insert blob is successful!");
+				dataInserted = true;
+			}
+			preparedStatement.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeConnection(connection);
+		}
+
+		return dataInserted;
 	}
 
 	@Override
