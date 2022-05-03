@@ -5,13 +5,12 @@ import java.util.Date;
 public class Comment {
 
 	private int comId;
-	private String objectTb;
-	private int objectId;
+	private String itemTb;
+	private int itemId;
 	private int userId;
-	private Date com_date;
+	private Date comDate;
 	private int rate;
 	private String content;
-	private byte[] images;
 
 	public int getComId() {
 		return comId;
@@ -21,20 +20,20 @@ public class Comment {
 		this.comId = comId;
 	}
 
-	public String getObjectTb() {
-		return objectTb;
+	public String getItemTb() {
+		return itemTb;
 	}
 
-	public void setObjectTb(String objectTb) {
-		this.objectTb = objectTb;
+	public void setItemTb(String itemTb) {
+		this.itemTb = itemTb;
 	}
 
-	public int getObjectId() {
-		return objectId;
+	public int getItemId() {
+		return itemId;
 	}
 
-	public void setObjectId(int objectId) {
-		this.objectId = objectId;
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
 	}
 
 	public int getUserId() {
@@ -45,12 +44,12 @@ public class Comment {
 		this.userId = userId;
 	}
 
-	public Date getCom_date() {
-		return com_date;
+	public Date getComDate() {
+		return comDate;
 	}
-
-	public void setCom_date(Date com_date) {
-		this.com_date = com_date;
+	
+	public void setComDate(Date comDate) {
+		this.comDate = comDate;
 	}
 
 	public int getRate() {
@@ -67,14 +66,6 @@ public class Comment {
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public byte[] getImages() {
-		return images;
-	}
-
-	public void setImages(byte[] images) {
-		this.images = images;
 	}
 
 }

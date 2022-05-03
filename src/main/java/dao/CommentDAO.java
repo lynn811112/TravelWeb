@@ -1,15 +1,10 @@
 package dao;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Comment;
@@ -19,100 +14,110 @@ public class CommentDAO implements DAO<Comment> {
 
 	private static final String SELECT_ALL_SQL = "SELECT * FROM comments";
 	private static final String SELECT_ONE_SQL = "SELECT * FROM comments WHERE com_id = ?";
-	private static final String INSERT_SQL = "INSERT INTO comments VALUES (?,?,?,?,?,?)";
-	private static final String UPDATE_SQL = "UPDATE travel_web SET district=?, address=?, land_area=?, total_area=?,inter_area=?, park_area=?, type=?, usage=?, structure=?, complete_date=?   WHERE re_id = ?;";
-	private static final String DELETE_SQL = "DELETE travel_web WHERE com_id = ?";
+	private static final String INSERT_SQL = "INSERT INTO comments VALUES (?,?,?,getdate(),?,?)";
+	private static final String UPDATE_SQL = "UPDATE comments SET item_tb=?, item_id=?, user_id=?, rate=?, content=? WHERE com_id = ?;";
+	private static final String DELETE_SQL = "DELETE comments WHERE com_id = ?";
 
 	@Override
-	public List<Comment> getAll() {
-
-		return null;
-	}
-
-	@Override
-	public Comment getOne(int id) {
-		Connection connection = null;
-		Comment comment = new Comment();
+	public List<Comment> selectAll() {
+		Connection conn = null;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		List<Comment> comments = new ArrayList<>();
 		try {
-			connection = DBConnection.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ONE_SQL);
-			preparedStatement.setInt(1, id);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()) {
-				comment.setComId(resultSet.getInt("com_id"));
-				comment.setObjectTb(resultSet.getString("object_tb"));
-				System.out.println(comment.getObjectTb());
-				comment.setObjectId(resultSet.getInt("object_id"));
-				comment.setUserId(resultSet.getInt("user_id"));
-				comment.setCom_date(resultSet.getDate("com_date"));
-				comment.setRate(resultSet.getInt("rate"));
-				comment.setContent(resultSet.getString("content"));
-				FileOutputStream fos = new FileOutputStream("C:\\iSpan\\Code\\TravelWeb\\ref\\friends-min2.jpg");
-
-				Blob blob = resultSet.getBlob("image");
-				byte[] data = blob.getBytes(1, (int) blob.length());
-				comment.setImages(data);
-				fos.write(data);
-				fos.close();
-				System.out.println("File output is successful!");
-
-
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(SELECT_ALL_SQL);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Comment comment = new Comment();
+				comment.setComId(rs.getInt(1));
+				comment.setItemTb(rs.getString(2));
+				comment.setItemId(rs.getInt(3));
+				comment.setUserId(rs.getInt(4));
+				comment.setComDate(rs.getDate(5));
+				comment.setRate(rs.getInt(6));
+				comment.setContent(rs.getString(7));
+				comments.add(comment);
 			}
-			resultSet.close();
-			preparedStatement.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			DBConnection.closeConnection(connection);
+			DBConnection.closeConnection(conn);
+		}
+		return comments;
+	}
+
+	@Override
+	public Comment selectOne(int id) {
+		Connection conn = null;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		Comment comment = new Comment();
+//		String imgOutputPath = "C:\\iSpan\\Code\\TravelWeb\\ref\\friends-min2.jpg";
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(SELECT_ONE_SQL);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				comment.setComId(rs.getInt(1));
+				comment.setItemTb(rs.getString(2));
+				comment.setItemId(rs.getInt(3));
+				comment.setUserId(rs.getInt(4));
+				comment.setComDate(rs.getDate(5));
+				comment.setRate(rs.getInt(6));
+				comment.setContent(rs.getString(7));
+//				FileOutputStream fileOutputStream = new FileOutputStream(imgOutputPath);
+//				Blob blob = resultSet.getBlob("image");
+//				byte[] data = blob.getBytes(1, (int) blob.length());
+//				comment.setImages(data);
+//				fileOutputStream.write(data);
+//				fileOutputStream.close();
+//				System.out.println("File output is successful!");
+				rs.close();
+				pstmt.close();
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeConnection(conn);
 		}
 		return comment;
 	}
 
 	@Override
 	public boolean insert(Comment comment) {
-		Connection connection = null;
-		boolean dataInserted = false; // 資料尚未insert前，此布林值為false
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String[] generatedCols = { "comId" }; // 取得auto-generated的ID
+		boolean isInserted = false;
 		try {
-			connection = DBConnection.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL);
-
-			// 未設定Comment Model，直接給予值的方式
-			preparedStatement.setString(1, "Hotel");
-			preparedStatement.setInt(2, 2);
-			preparedStatement.setInt(3, 3);
-			preparedStatement.setString(4, "2022/6/6");
-			preparedStatement.setInt(5, 5);
-			preparedStatement.setString(6, "Amazing Place to stay!");
-
-			// 前端
-//			preparedStatement.setString(1, comment.getObjectTb());
-//			preparedStatement.setInt(2, comment.getObjectId());
-//			preparedStatement.setInt(3, comment.getUserId());
-//			preparedStatement.setDate(4, (Date) comment.getCom_date());
-//			preparedStatement.setInt(5, comment.getRate());
-//			preparedStatement.setString(6, comment.getContent());
-//			preparedStatement.setBinaryStream(7, comment.getImages());	
-
-//			FileInputStream fileInputStream = new FileInputStream("C:\\iSpan\\Code\\TravelWeb\\ref\\friends-min.jpg");
-//			preparedStatement.setBinaryStream(7, fileInputStream);
-			int count = preparedStatement.executeUpdate();
-			if (count > 0) {
-				System.out.println("Insert blob is successful!");
-				dataInserted = true;
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(INSERT_SQL, generatedCols); // 要放進statement，才能回傳ID
+			pstmt.setString(1, comment.getItemTb());
+			pstmt.setInt(2, comment.getItemId());
+			pstmt.setInt(3, comment.getUserId());
+			pstmt.setInt(4, comment.getRate());
+			pstmt.setString(5, comment.getContent());
+//			pstmt.setBytes(7, comment.getImages());
+			pstmt.executeUpdate();
+			rs = pstmt.getGeneratedKeys();
+			if (rs.next()) {
+				comment.setComId(rs.getInt(1)); // 將回傳ID設為comment物件的ComId
+				isInserted = true;
 			}
-			preparedStatement.close();
-		} catch (Exception e) {
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			DBConnection.closeConnection(connection);
+			DBConnection.closeConnection(conn);
 		}
+		return isInserted;
 
-		return dataInserted;
 	}
 
 	@Override
@@ -123,8 +128,50 @@ public class CommentDAO implements DAO<Comment> {
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		Connection conn = null;
+		boolean isDeleted = false;
+		try {
+			conn = DBConnection.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(DELETE_SQL);
+			pstmt.setInt(1, id);
+			int count = pstmt.executeUpdate();
+			if (count > 0) isDeleted = true;
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeConnection(conn);
+		}
+		return isDeleted;
 	}
+	
+
+//	public static byte[] readAllBytes(FileInputStream fileInputStream) throws IOException {
+//		final int bufLen = 4 * 0x400; // 4KB
+//		byte[] buf = new byte[bufLen];
+//		int readLen;
+//		IOException exception = null;
+//
+//		try {
+//			try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+//				while ((readLen = fileInputStream.read(buf, 0, bufLen)) != -1)
+//					outputStream.write(buf, 0, readLen);
+//
+//				return outputStream.toByteArray();
+//			}
+//		} catch (IOException e) {
+//			exception = e;
+//			throw e;
+//		} finally {
+//			if (exception == null)
+//				fileInputStream.close();
+//			else
+//				try {
+//					fileInputStream.close();
+//				} catch (IOException e) {
+//					exception.addSuppressed(e);
+//				}
+//		}
+//	}
 
 }

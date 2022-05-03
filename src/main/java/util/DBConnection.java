@@ -12,22 +12,24 @@ public final class DBConnection {
 	private static final String PASSWORD = "manager";
 
 	public static Connection getConnection() {
-		Connection connection = null;
+		Connection conn = null;
 		try {
 			Class.forName(JDBC_DRIVER);
-			connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+			conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-		return connection;
+		return conn;
 	}
 
-	public static void closeConnection(Connection connection) {
-		if (connection != null)
+	public static void closeConnection(Connection conn) {
+		if  (conn != null) {
 			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+				 conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
 	}
 }

@@ -27,7 +27,10 @@ public class CommentServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+//		List<User> listUser = userDAO.selectAllUsers();
+//		request.setAttribute("listUser", listUser);
+//		RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
+//		dispatcher.forward(request, response);
 	}
 
 	/**
