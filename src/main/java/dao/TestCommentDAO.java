@@ -14,16 +14,16 @@ public class TestCommentDAO {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		CommentDAO commentDAO = new CommentDAO();
+//		CommentDAO commentDAO = new CommentDAO();
 		Comment comment = new Comment();
-		String imginputPath = "C:\\iSpan\\Code\\TravelWeb\\ref\\fall-min.jpg";
-		String imgOutputPath = "C:\\iSpan\\Code\\TravelWeb\\ref\\friends-min3.jpg";
-		
-		comment.setItemTb("hotel");
-		comment.setItemId(3);
-		comment.setUserId(1);
-		comment.setRate(5);
-		comment.setContent("Wonderful!");
+//		String imginputPath = "C:\\iSpan\\Code\\TravelWeb\\ref\\fall-min.jpg";
+//		String imgOutputPath = "C:\\iSpan\\Code\\TravelWeb\\ref\\friends-min3.jpg";
+//		
+//		comment.setItemTb("hotel");
+//		comment.setItemId(3);
+//		comment.setUserId(1);
+//		comment.setRate(5);
+//		comment.setContent("Wonderful!");
 
 //		try {
 //			FileInputStream fileInputStream = new FileInputStream(imginputPath);
@@ -37,17 +37,17 @@ public class TestCommentDAO {
 		
 //	    boolean result = commentDAO.insert(comment);
 //		
-		System.out.println(comment.getComId());
-//		//		
-		comment = commentDAO.selectOne(5);
-//
 //		System.out.println(comment.getComId());
-//		System.out.println(comment.getItemId());
-//		System.out.println(comment.getItemId());
-//		System.out.println(comment.getUserId());
-//		System.out.println(comment.getComDate());
-//		System.out.println(comment.getRate());
-//		System.out.println(comment.getContent());
+//		//		
+//		comment = commentDAO.selectOne(6);
+
+		System.out.println(comment.getComId());
+		System.out.println(comment.getItemId());
+		System.out.println(comment.getItemId());
+		System.out.println(comment.getUserId());
+		System.out.println(comment.getComDate());
+		System.out.println(comment.getRate());
+		System.out.println(comment.getContent());
 		
 //		List<Comment> comments = commentDAO.selectAll();
 //		for (Comment comment2 : comments) {
@@ -60,7 +60,7 @@ public class TestCommentDAO {
 //			System.out.println(comment2.getContent());
 //		}
 
-		System.out.println(commentDAO.delete(19));
+//		System.out.println(commentDAO.delete(19));
 		
 //		try {
 //			FileOutputStream fileOutputStream = new FileOutputStream(imgOutputPath);
