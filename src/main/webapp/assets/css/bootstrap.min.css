@@ -9915,7 +9915,7 @@ a.text-dark:hover {
     }
 
     abbr[title]::after {
-        content: " ("attr(title) ")"
+        content: " (" attr(title) ")"
     }
 
     pre {

@@ -37,30 +37,36 @@
 </head>
 
 <body>
-    <!-- Left-Navbar -->
+    <header id="header" class="header">
+        <div class="top-right ">
+            <a id="menuToggle" class="menutoggle"><i class="fa-lg bi bi-list"></i></a>
+        </div>
+    </header>
+    <!-- Left Panel -->
     <aside id="left-panel" class="left-panel">
-        <div id="navbar"></div>
-        <script>
-            $(function () {
-                $("#navbar").load("partials/navbar.html");
-            });
-        </script>
+        <nav class="navbar navbar-expand-sm navbar-default">
+            <div id="main-menu" class="main-menu collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li id="title" class="menu-title" >Travel Web</li>
+                    <li class="menu-title">項目管理</li>
+                    <li><a href="#"><i class="menu-icon fa bi bi-person-fill"></i>會員管理</a></li>
+                    <li><a href="#"><i class="menu-icon fa bi bi-file-earmark-text-fill"></i>訂單管理</a></li>
+                    <li><a href="#"><i class="menu-icon fa bi bi-briefcase-fill"></i>行程管理</a></li>
+                    <li><a href="#"><i class="menu-icon fa bi bi-house-door-fill"></i>住宿管理</a></li>
+                    <li><a href="#"><i class="menu-icon fa bi-signpost-2-fill"></i>租車管理</a></li>
+                    <li><a href="comment.jsp"><i class="menu-icon fa bi bi-chat-dots-fill"></i>評論管理</a></li>
+                    <li class="menu-title">管理員項目</li>
+                    <li><a href="#"><i class="menu-icon fa bi bi-bar-chart-fill"></i>銷售數據</a></li>
+                    <li><a href="#"> <i class="menu-icon fa bi bi-gear-wide-connected"></i>Uipath</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
     </aside>
-    <!-- /#Left-Navbar -->
 
 
     <!-- Right Panel -->
 
     <div id="right-panel" class="right-panel">
-
-        <!-- Header-->
-        <div id="header"></div>
-        <script>
-            $(function () {
-                $("#header").load("partials/header.html");
-            });
-        </script>
-        <!-- Header-->
 
         <div class="breadcrumbs">
             <div class="breadcrumbs-inner">
@@ -94,6 +100,16 @@
                         <div class="card">
                             <div class="card-header">
                                 <strong class="card-title">評論列表</strong>
+                                <div class="float-right">
+                                    <div class="page-title">
+                                        <div class="float-right">
+                                            <form action="./CommentServlet">
+                                                <input type="submit" name="action" value="query" id="">
+                                                <input type="submit" name="action" value="insert" id="">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
@@ -134,14 +150,6 @@
                 </div>
             </div><!-- .animated -->
         </div><!-- .content -->
-
-        <div class="clearfix"></div>
-        <div id="footer"></div>
-        <script>
-            $(function () {
-                $("#footer").load("partials/footer.html");
-            });
-        </script>
 
 
     </div><!-- /#right-panel -->

@@ -13,30 +13,32 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 
 import model.ComImage;
 import model.Comment;
+import util.DBConnection;
 
 public class ComImageDAO implements DAO<ComImage> {
 
 	private static final String SELECT_ALL_SQL = "SELECT * FROM comment_images";
 	private static final String SELECT_ONE_SQL = "SELECT * FROM comment_images WHERE img_id=?";
+	private static final String SELECT_MUL_SQL = "SELECT * FROM comment_images WHERE com_id=?";
 	private static final String INSERT_SQL = "INSERT INTO comment_images VALUES (?,?)";
 	private static final String UPDATE_SQL = "UPDATE comment_images SET com_image=? WHERE img_id=?;";
 	private static final String DELETE_SQL = "DELETE comment_images WHERE img_id=?";
 
-	private DataSource dataSource;
-
-	public ComImageDAO(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+//	private DataSource dataSource;
+//
+//	public ComImageDAO(DataSource dataSource) {
+//		this.dataSource = dataSource;
+//	}
 
 	@Override
 	public List<ComImage> selectAll() {
-		Connection conn = null;
+		Connection conn;
 		PreparedStatement pstmt;
 		ResultSet rs;
 		ComImage comImage;
 		List<ComImage> comImages = new ArrayList<>();
 		try {
-			conn = dataSource.getConnection();
+			conn = DBConnection.getConnectionObject();
 			pstmt = conn.prepareStatement(SELECT_ALL_SQL);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -52,32 +54,48 @@ public class ComImageDAO implements DAO<ComImage> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DBConnection.closeConnection();
 		}
 		return comImages;
 	}
 
 	@Override
 	public ComImage selectOne(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		ComImage comImage = new ComImage();
+		try {
+			conn = DBConnection.getConnectionObject();
+			pstmt = conn.prepareStatement(SELECT_ONE_SQL);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				comImage.setImgId(rs.getInt("img_id"));
+				comImage.setComId(rs.getInt("com_id"));
+				Blob blob = rs.getBlob("image");
+				byte[] data = blob.getBytes(1, (int) blob.length());
+				comImage.setComImage(data);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return comImage;
 	}
 
 	@Override
 	public boolean insert(ComImage comImage) {
 		boolean isInserted = false;
-		Connection conn = null;
+		Connection conn;
 		PreparedStatement pstmt;
 		ResultSet rs;
 		String[] generatedCols = { "imgId" }; // 取得auto-generated的ID
 		try {
-			conn = dataSource.getConnection();
+			conn = DBConnection.getConnectionObject();
 			pstmt = conn.prepareStatement(INSERT_SQL, generatedCols); // 要放進statement，才能回傳ID
 			pstmt.setInt(1, comImage.getComId());
 			pstmt.setBytes(2, comImage.getComImage());
@@ -92,13 +110,7 @@ public class ComImageDAO implements DAO<ComImage> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DBConnection.closeConnection();
 		}
 		return isInserted;
 	}
@@ -112,11 +124,11 @@ public class ComImageDAO implements DAO<ComImage> {
 	@Override
 	public boolean delete(int id) {
 		boolean isDeleted = false;
-		Connection conn = null;
+		Connection conn;
 		PreparedStatement pstmt;
 		int count;
 		try {
-			conn = dataSource.getConnection();
+			conn = DBConnection.getConnectionObject();
 			pstmt = conn.prepareStatement(DELETE_SQL);
 			pstmt.setInt(1, id);
 			count = pstmt.executeUpdate();
@@ -125,13 +137,7 @@ public class ComImageDAO implements DAO<ComImage> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DBConnection.closeConnection();
 		}
 		return isDeleted;
 	}
