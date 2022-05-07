@@ -834,11 +834,11 @@ aside.left-panel {
 /* Right panel */
 .right-panel {
   background-color: #f1f2f7;
-  margin-left: 280px;
-  height: 100
+   margin-left: 280px;
+  height: 100vm;
   /* width: 100%; */
   /* float: right; */
-  /* display: inline-block; */
+  display: block; 
 }
 
   .right-panel .top-rigth {
@@ -2247,6 +2247,10 @@ footer.site-footer {
     max-width: 83px;
     width: 83px; 
   }
+  
+  .right-panel {
+   margin-left: 280px;
+  }
 
   .navbar .navbar-nav > li {
       padding-left: 50px;
@@ -2488,6 +2492,11 @@ footer.site-footer {
   aside.left-panel {
       top: 55px;
     overflow: scroll; }
+    
+ .right-panel .breadcrumbs {
+    margin-top: 85px;
+
+}
 
   .right-panel header.header {
     height: 62px; }

@@ -31,9 +31,14 @@ public class CommentServlet extends HttpServlet {
 			case "query":
 				processQuery(request, response, commentDAO);
 				break;
+			case "insert":
+				processInsert(request, response, commentDAO);
+				break;
+				
 			case "update":
 //				processUpdate(request, response, commentDAO);
 				break;
+				
 			default:
 				break;
 			}
@@ -58,6 +63,21 @@ public class CommentServlet extends HttpServlet {
 		request.setAttribute("comments", comments);
         try {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/comment-list.jsp");
+			requestDispatcher.forward(request, response);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	private void processInsert(HttpServletRequest request, HttpServletResponse response, CommentDAO commentDAO) throws SQLException, IOException {
+		request.getParameter("comId");
+		List<Comment> comments =  commentDAO.selectAll();
+		request.setAttribute("comments", comments);
+        try {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/comment-insert.jsp");
 			requestDispatcher.forward(request, response);
 		} catch (ServletException e) {
 			e.printStackTrace();

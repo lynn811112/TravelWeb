@@ -15,6 +15,8 @@ CREATE TABLE comments (
 );
 
 INSERT INTO comments VALUES ('hotel', 4, 2, getdate(), 4, 'Amazing Trip');
+--INSERT INTO comments VALUES ('hotel', 4, 2, getdate(), 4, N'Amazing Trip!\n 有點貴就是了><');
+INSERT INTO comments VALUES ('hotel', 4, 2, getdate(), 4, N'Amazing Trip!<br> 有點貴就是了><');
 
 --INSERT INTO comments (item_tb, item_id, user_id, com_date, rate, content, image) 
 --SELECT 'hotel', 4, 2, getdate(), 4, 'Amazing Trip', BulkColumn 
