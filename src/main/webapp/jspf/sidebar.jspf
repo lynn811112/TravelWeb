@@ -10,6 +10,7 @@
 	<nav class="navbar navbar-expand-sm navbar-default">
 		<div id="main-menu" class="main-menu collapse navbar-collapse">
 			<ul class="nav navbar-nav">
+				
 				<li id="title" class="menu-title">Travel Web</li>
 				<li class="menu-title">項目管理</li>
 				<li><a href="#"><i class="menu-icon fa bi bi-person-fill"></i>會員管理</a></li>
@@ -20,7 +21,7 @@
 				<li><a href="#"><i
 						class="menu-icon fa bi bi-house-door-fill"></i>住宿管理</a></li>
 				<li><a href="#"><i class="menu-icon fa bi-signpost-2-fill"></i>租車管理</a></li>
-				<li><a href="comment.jsp"><i
+				<li><a href="comment"><i
 						class="menu-icon fa bi bi-chat-dots-fill"></i>評論管理</a></li>
 				<li class="menu-title">管理員項目</li>
 				<li><a href="#"><i

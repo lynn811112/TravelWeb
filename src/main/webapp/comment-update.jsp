@@ -44,12 +44,12 @@ Comment comment = (Comment)request.getAttribute("comment");
                         <div class="card-body card-block">
 
                             <form name="form" action="comment" method="POST" class="form-horizontal">
+                            	<input type="hidden" name="comId" value="<%=comment.getComId()%>">
                                 <!-- 選擇類別 -->
                                 <div class="mb-4 row">
                                     <label for="tb-select" class="col-sm-3 col-form-label">項目類別</label>
                                     <div class="col-sm-9">
                                         <select class="form-select" name="itemTb" id="tb-select" >
-                                            <option selected>Open this select menu</option>
                                             <option value="ticket">景點票券</option>
                                             <option value="restaurant">餐廳</option>
                                             <option value="hotel">住宿</option>
@@ -62,7 +62,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <div class="mb-4 row">
                                     <label for="item-id" class="col-sm-3 col-form-label">商品編號</label>
                                     <div class="col-sm-9">
-                                      <input type="text" class="form-control" name="itemId" id="item-id">
+                                      <input type="text" class="form-control" name="itemId" id="item-id" value="<%=comment.getItemId()%>">
                                     </div>
                                 </div>
                                 
@@ -70,7 +70,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <div class="mb-4 row">
                                     <label for="item-id" class="col-sm-3 col-form-label">會員編號</label>
                                     <div class="col-sm-9">
-                                      <input type="text" class="form-control" name="userId" id="item-id">
+                                      <input type="text" class="form-control" name="userId" id="item-id" value="<%=comment.getUserId()%>">
                                     </div>
                                 </div>
 
@@ -78,7 +78,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <div class="mb-4 row">
                                     <label for="customRange" class="col-sm-3 col-form-label">給予評分</label>
                                     <div class="col-sm-9">
-                                        <input type="range" class="form-range" name="rate"  id="customRange" min="0" max="5">
+                                        <input type="range" class="form-range" name="rate"  id="customRange" value="<%=comment.getRate()%>" min="0" max="5">
                                     </div>
                                 </div>
 
@@ -86,13 +86,13 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <div class="mb-4 row">
                                     <label for="content-text" class="col-sm-3 col-form-label">評論內容</label>
                                     <div class="col-sm-9">
-                                        <textarea class="form-control" name="content" id="content-text" cols="30" rows="10"></textarea>
+                                        <textarea class="form-control" name="content" id="content-text" cols="30" rows="10"> <%=comment.getContent()%></textarea>
                                         <!-- <input type="texta" class="form-control" name="item-id" id="item-id" > -->
                                       </div>
                                 </div>
                                 <!-- 送出 -->
                                 <!-- action=insert對應到controller的doGet -->
-                                <button type="submit" name="action" value="insert" class="btn btn-primary mt-4">送出</button>
+                                <button type="submit" name="action" value="update" class="btn btn-primary mt-4">送出</button>
                             </form>
                             
                         </div>

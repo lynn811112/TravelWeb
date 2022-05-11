@@ -8,6 +8,7 @@ public class Comment implements Serializable {
 	private int comId;
 	private String itemTb;
 	private int itemId;
+//	private int orderId;
 	private int userId;
 	private Date comDate;
 	private int rate;

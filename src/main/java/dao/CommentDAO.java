@@ -19,39 +19,28 @@ public class CommentDAO implements DAO<Comment> {
 	private static final String UPDATE_SQL = "UPDATE comments SET item_tb=?, item_id=?, user_id=?, rate=?, content=? WHERE com_id = ?;";
 	private static final String DELETE_SQL = "DELETE comments WHERE com_id = ?";
 
-//	private DataSource dataSource;
-//
-//	public CommentDAO(DataSource dataSource) {
-//		this.dataSource = dataSource;
-//	}
-
-//	private Connection conn;
-//
-//	public CommentDAO(Connection conn) {
-//		this.conn = conn;
-//	}
-
+	
 	@Override
 	public List<Comment> selectAll() {
 		Connection conn;
 		PreparedStatement pstmt;
 		ResultSet rs;
 		Comment comment;
-		List<Comment> comments = new ArrayList<>();
+		List<Comment> comments = new ArrayList<>(); // new一個ArrayList
 		try {
-			conn = DBConnection.getConnectionObject();
+			conn = DBConnection.getConnectionObject(); // 用package util裡的DBConnection得到DB連線物件
 			pstmt = conn.prepareStatement(SELECT_ALL_SQL);
-			rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery(); // ResultSet from DB
 			while (rs.next()) {
-				comment = new Comment();
-				comment.setComId(rs.getInt("com_Id"));
+				comment = new Comment(); // new一個物件(JavaBean)
+				comment.setComId(rs.getInt("com_Id")); // set此物件屬性
 				comment.setItemTb(rs.getString("item_tb"));
 				comment.setItemId(rs.getInt("item_id"));
 				comment.setUserId(rs.getInt("user_id"));
 				comment.setComDate(rs.getDate("com_date"));
 				comment.setRate(rs.getInt("rate"));
 				comment.setContent(rs.getString("content"));
-				comments.add(comment);
+				comments.add(comment); // 將此物件加到 ArrayList
 			}
 			rs.close();
 			pstmt.close();
@@ -69,7 +58,6 @@ public class CommentDAO implements DAO<Comment> {
 		PreparedStatement pstmt;
 		ResultSet rs;
 		Comment comment = new Comment();
-
 		try {
 			conn = DBConnection.getConnectionObject();
 			pstmt = conn.prepareStatement(SELECT_ONE_SQL);
