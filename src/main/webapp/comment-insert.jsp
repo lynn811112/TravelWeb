@@ -17,6 +17,17 @@ Comment comment = (Comment)request.getAttribute("comment");
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/stars.css">
+	<style>
+	.image{
+    position:relative;
+    overflow:hidden;
+    padding-bottom:100%;
+	}
+	.image img{
+	    position:absolute;
+	}
+	</style>
 </head>
 
 <body>
@@ -28,9 +39,11 @@ Comment comment = (Comment)request.getAttribute("comment");
 		<div class="breadcrumbs">
 			<div class="breadcrumbs-inner">
 				<div class="row m-0">
-					<div class="page-header float-left">
-						<div class="page-title">
-							<h1>新增評論</h1>
+					<div class="col-sm-4">
+						<div class="page-header float-left">
+							<div class="page-title">
+								<h1>評論管理 / 新增評論</h1>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -43,13 +56,12 @@ Comment comment = (Comment)request.getAttribute("comment");
                     <div class="card">
                         <div class="card-body card-block">
 
-                            <form name="form" action="comment" method="POST" class="form-horizontal">
+                            <form name="form" action="comment" method="POST" class="form-horizontal"  enctype="multipart/form-data">
                                 <!-- 選擇類別 -->
                                 <div class="mb-4 row">
                                     <label for="tb-select" class="col-sm-3 col-form-label">項目類別</label>
                                     <div class="col-sm-9">
                                         <select class="form-select" name="itemTb" id="tb-select" >
-                                            <option selected>Open this select menu</option>
                                             <option value="ticket">景點票券</option>
                                             <option value="restaurant">餐廳</option>
                                             <option value="hotel">住宿</option>
@@ -77,19 +89,47 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <!-- 給予評分 -->
                                 <div class="mb-4 row">
                                     <label for="customRange" class="col-sm-3 col-form-label">給予評分</label>
-                                    <div class="col-sm-9">
-                                        <input type="range" class="form-range" name="rate"  id="customRange" min="0" max="5">
-                                    </div>
+			                        <div class="col-sm-9">
+				                        <fieldset class="starability-basic">
+					                        <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked/>
+				                            <input type="radio" id="first-rate1" name="rating" value="1" />
+				                            <label for="first-rate1" title="Terrible">1 star</label>
+				                            <input type="radio" id="first-rate2" name="rating" value="2" />
+				                            <label for="first-rate2" title="Not good">2 stars</label>
+				                            <input type="radio" id="first-rate3" name="rating" value="3" />
+				                            <label for="first-rate3" title="Average">3 stars</label>
+				                            <input type="radio" id="first-rate4" name="rating" value="4" />
+				                            <label for="first-rate4" title="Very good">4 stars</label>
+				                            <input type="radio" id="first-rate5" name="rating" value="5" />
+				                            <label for="first-rate5" title="Amazing">5 stars</label>
+				                        </fieldset>
+                    				</div>
                                 </div>
 
                                 <!-- 體驗分享 -->
                                 <div class="mb-4 row">
                                     <label for="content-text" class="col-sm-3 col-form-label">評論內容</label>
                                     <div class="col-sm-9">
-                                        <textarea class="form-control" name="content" id="content-text" cols="30" rows="10"></textarea>
+                                        <textarea class="form-control" name="content" id="content-text" cols="30" rows="5"></textarea>
                                         <!-- <input type="texta" class="form-control" name="item-id" id="item-id" > -->
                                       </div>
                                 </div>
+                                
+                                <div class="mb- row justify-content-end">
+                                	
+								  	<label for="formFileMultiple" class="col-sm-3 col-form-label">上傳照片</label>
+								  	<div class="col-sm-9">
+								  		<input class="form-control" type="file" name="images" id="formFileMultiple" multiple onchange="previewMultiple(event)">
+										<label for="images" class="form-label custom-file-label"></label>
+									</div>
+								</div>
+								<div class="row justify-content-end">
+									<div class="col-sm-9">
+										<div class="row" id="formFile">
+											
+										</div>
+									</div>
+								</div>
                                 <!-- 送出 -->
                                 <!-- action=insert對應到controller的doGet -->
                                 <button type="submit" name="action" value="insert" class="btn btn-primary mt-4">送出</button>
@@ -108,6 +148,16 @@ Comment comment = (Comment)request.getAttribute("comment");
 	<script src="js/vendor/jquery-2.1.4.min.js"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/main.js"></script>
+	<script>
+		function previewMultiple(event) {
+		    var images = document.getElementById("formFileMultiple");
+		    var number = images.files.length;
+		    for (i = 0; i < number; i++) {
+		        var urls = URL.createObjectURL(event.target.files[i]);
+		        document.getElementById("formFile").innerHTML += '<div class="col-4"> <img src="' + urls + '" class="rounded"/> </div>';
+		    }
+		}
+	</script>
 </body>
 
 </html>

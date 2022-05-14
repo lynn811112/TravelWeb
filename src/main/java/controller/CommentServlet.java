@@ -1,18 +1,26 @@
 package controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.apache.jasper.tagplugins.jstl.core.If;
 
@@ -20,6 +28,11 @@ import dao.CommentDAO;
 import model.Comment;
 
 @WebServlet("/comment")
+
+@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
+maxFileSize=1024*1024*10,      // 10MB
+maxRequestSize=1024*1024*50)   // 50MB
+
 public class CommentServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -34,7 +47,6 @@ public class CommentServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession(true);
 		String action = request.getParameter("action");
-		System.out.println(action);
 		if (action == null) {
 			processQuery(request, response);
 		} else if (action.equals("new")) {
@@ -80,10 +92,21 @@ public class CommentServlet extends HttpServlet {
         Comment comment = new Comment();
         comment.setItemTb(request.getParameter("itemTb"));
         comment.setItemId(Integer.parseInt(request.getParameter("itemId")));
-        // comment.setOrderId();
         comment.setUserId(Integer.parseInt(request.getParameter("userId")));
-        comment.setRate(Integer.parseInt(request.getParameter("rate")));
+        comment.setRate(Integer.parseInt(request.getParameter("rating")));
         comment.setContent(request.getParameter("content"));
+
+        ArrayList<Part> parts = (ArrayList<Part>) request.getParts();
+        ArrayList<InputStream> images = new ArrayList<>();
+        
+        InputStream is = null;
+        for (int i = 0; i < parts.size(); i++) {
+        	if (parts.get(i).getContentType()!=null) {
+            	is = parts.get(i).getInputStream();
+            	images.add(is);
+        	}
+        }
+        comment.setImageBytes(images);
         
         commentDAO.insert(comment);
         request.setAttribute("comment", comment);
@@ -112,3 +135,37 @@ public class CommentServlet extends HttpServlet {
 	}
 
 }
+
+
+/*
+ * 
+ * for processInsert()
+ * 
+ */
+
+//List<Part> parts =  (List<Part>) request.getParts();
+
+//Part filePart = request.getPart("image");
+//FileInputStream fis = new FileInputStream(filePart);
+//InputStream is = filePart.getInputStream();
+
+//
+//System.out.println("parts.size()="+ parts.size()); 
+//for (int i = 0; i <parts.size(); i++) {
+//	System.out.println("parts "+i);
+//  System.out.println(parts.get(i).getName());
+//  System.out.println(parts.get(i).getSize());
+//  System.out.println(parts.get(i).getContentType());
+//}
+
+//InputStream is = parts.get(5).getInputStream();
+//
+//
+//InputStream is = parts.get(5).getInputStream();
+//comment.setImageBytes1(is);
+
+//is = parts.get(6).getInputStream();
+//comment.setImageBytes2(is);
+
+//is = parts.get(7).getInputStream();
+//comment.setImageBytes3(is);

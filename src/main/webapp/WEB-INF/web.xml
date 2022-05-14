@@ -28,8 +28,5 @@
 
 
 
-	<!--<servlet> <servlet-name>CommentServlet</servlet-name> <jsp-file>/comment.jsp</jsp-file> 
-		</servlet> <servlet-mapping> <servlet-name>CommentServlet</servlet-name> 
-		<url-pattern>/Comment/*</url-pattern> </servlet-mapping> -->
 
 </web-app>
