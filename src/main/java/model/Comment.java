@@ -12,15 +12,15 @@ public class Comment implements Serializable {
 	private int comId;
 	private String itemTb;
 	private int itemId;
-	private int userId;
+	private String userId;
 	private Date comDate;
-	private int rate;
+	private int rating;
 	private String content;
 //	private List<String> imageStrs;
 	private String image1;
 	private String image2;
 	private String image3;
-	private List<InputStream> imageBytes;	
+	private List<InputStream> imageBytes;
 
 
 	public int getComId() {
@@ -47,11 +47,11 @@ public class Comment implements Serializable {
 		this.itemId = itemId;
 	}
 
-	public int getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
@@ -63,12 +63,12 @@ public class Comment implements Serializable {
 		this.comDate = comDate;
 	}
 
-	public int getRate() {
-		return rate;
+	public int getRating() {
+		return rating;
 	}
 
-	public void setRate(int rate) {
-		this.rate = rate;
+	public void setRating(int rating) {
+		this.rating = rating;
 	}
 
 	public String getContent() {

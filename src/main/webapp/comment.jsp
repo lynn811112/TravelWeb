@@ -6,25 +6,27 @@
 <html class="no-js" lang="">
 
 <head>
-<%
-List<Comment> comments = (List<Comment>)request.getAttribute("comments");
-%>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>評論列表</title>
-<meta name="description" content="dashboard">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <%-- style sheet (以下三個style sheet請記得link進來) --%>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.css"> -->
 <style>
-
 	img {
   		object-fit: cover;
   		width:70px;
   		height:70px;
-	}
+	}	
 	
+ 	table a { 
+ 		color: black; 
+ 		font-weight: bold; 
+ 	} 
 /* 	.btn-round { */
 /* 		border-radius: 50% */
 /* 	} */
@@ -68,9 +70,19 @@ List<Comment> comments = (List<Comment>)request.getAttribute("comments");
 								
 								</form>
 							</div>
-							<table class="table  table-hover">
+							<table id="table_id" class="display table table-hover" style="width: 100%">
+							    <colgroup>
+							       <col span="1" style="width: 4%;">
+							       <col span="1" style="width: 15%;">
+							       <col span="1" style="width: 10%;">
+							       <col span="1" style="width: 10%;">
+							       <col span="1" style="width: 5%; ">
+							       <col span="1" style="width: 25%;">
+							       <col span="1" style="width: 23%;">
+							       <col span="1" style="width: 8%;">
+							    </colgroup>
 								<thead>
-									<tr>
+									<tr class="text-center">
 										<th>#</th>
 										<th>項目ID</th>
 										<th>使用者ID</th>
@@ -83,16 +95,21 @@ List<Comment> comments = (List<Comment>)request.getAttribute("comments");
 								</thead>
 								<tbody>
 									<%
+									List<Comment> comments = (List<Comment>)request.getAttribute("comments");
 									for (Comment comment : comments) {
 									%>
 									<form name="form" action="comment" method="POST">
 										<tr>
 											<input type="hidden" name="comId" value="<%=comment.getComId()%>">
-											<th scope="row"><%=comment.getComId()%></th>
-											<td><%=comment.getItemTb()%><%=comment.getItemId()%></td>
+											<th scope="row" class="text-center"><%=comment.getComId()%></th>
+											<th>
+											  <a class="" data-bs-toggle="collapse" href="#collapseExample<%=comment.getComId()%>" role="button" aria-expanded="false" aria-controls="collapseExample">
+											    <%=comment.getItemTb()%>_<%=comment.getItemId()%> <i class="bi bi-chevron-down"></i>
+											  </a>
+											</th>
 											<td><%=comment.getUserId()%></td>
 											<td><%=comment.getComDate()%></td>
-											<td><%=comment.getRate()%></td>
+											<td  style="text-align: center;"><%=comment.getRating()%><i class="bi bi-star-fill text-warning"></i></td>
 											<td><%=comment.getContent()%></td>
 											<td>
 												<% if (comment.getImage1() != null) { %>
@@ -104,15 +121,7 @@ List<Comment> comments = (List<Comment>)request.getAttribute("comments");
 												<% if (comment.getImage3() != null) { %>
 													<img src="data:image/jpg;base64,<%=comment.getImage3()%>" class="rounded"/>
 												<% } %>
-<%-- 												<% if (comment.getImageStrs().size() >= 1) { %> --%>
-<%-- 													<img src="data:image/jpg;base64,<%=comment.getImageStrs().get(0)%>" class="rounded"/> --%>
-<%-- 												<% } %> --%>
-<%-- 												<% if (comment.getImageStrs().size() >= 2) { %> --%>
-<%-- 													<img src="data:image/jpg;base64,<%=comment.getImageStrs().get(1)%>" class="rounded"/> --%>
-<%-- 												<% } %> --%>
-<%-- 												<% if (comment.getImageStrs().size() >= 3) { %> --%>
-<%-- 													<img src="data:image/jpg;base64,<%=comment.getImageStrs().get(2)%>" class="rounded"/> --%>
-<%-- 												<% } %> --%>
+
 											</td>
 											<td><button type="submit" name="action" value="edit" class="btn btn-outline-warning btn-sm rounded-circle">
 													<i class="bi bi-pencil-square"></i>
@@ -122,7 +131,19 @@ List<Comment> comments = (List<Comment>)request.getAttribute("comments");
 												</button>
 											</td>
 										</tr>
+<!-- 										<div class="collapse" id="collapseExample"> -->
+										<tr class="collapse" id="collapseExample<%=comment.getComId()%>">
+											<td></td>
+											<td colspan="6">
+												<p>
+													Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+												</p>
+											</td>
+											<td></td>
+										</tr>
+<!-- 										</div> -->
 									</form>
+									
 									<%
 									}
 									%>
@@ -138,10 +159,11 @@ List<Comment> comments = (List<Comment>)request.getAttribute("comments");
 
 	<%-- Scripts --%>
 
-	<script src="js/vendor/jquery-2.1.4.min.js"></script>
+    <script src="js/jquery-3.6.0.js"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/main.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- 	<script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.js"></script> -->
 
 </body>
 

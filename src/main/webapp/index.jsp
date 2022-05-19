@@ -8,9 +8,8 @@
 
 	<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>後台管理</title>
-    <meta name="description" content="dashboard">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>後台管理</title>
     <%-- style sheet (以下三個style sheet請記得link進來) --%>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
@@ -33,7 +32,7 @@
     </main>
 
 	<%-- scripts --%>
-    <script src="js/vendor/jquery-2.1.4.min.js"></script>
+    <script src="js/jquery-3.6.0.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
 

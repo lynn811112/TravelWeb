@@ -10,14 +10,13 @@ Comment comment = (Comment)request.getAttribute("comment");
 %>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>評論列表</title>
-	<meta name="description" content="dashboard">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>評論列表</title>
 	<%-- style sheet (以下三個style sheet請記得link進來) --%>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/rating.css" />
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/stars.css">
 	<style>
 		img { 
 			object-fit: cover;
@@ -93,7 +92,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                     <label for="customRange" class="col-sm-3 col-form-label">給予評分</label>
                                     <div class="col-sm-9">
 				                        <fieldset class="starability-basic">
-					                        <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked/>
+					                        <input type="radio" id="no-rate" class="rating input-no-rate" name="rating" value="0" checked/>
 				                            <input type="radio" id="first-rate1" name="rating" value="1" />
 				                            <label for="first-rate1" title="Terrible">1 star</label>
 				                            <input type="radio" id="first-rate2" name="rating" value="2" />
@@ -135,26 +134,6 @@ Comment comment = (Comment)request.getAttribute("comment");
 													<img src="data:image/jpg;base64,<%=comment.getImage3()%>" class="rounded"/>
 												</div>
 											<% } %>
-											<%-- <% if (comment.getImage1() != null) { %>
-												<div class="col-6 mb-4">
-													<img src="data:image/jpg;base64,<%=comment.getImage1()%>" class="rounded"/>
-												</div>
-											<% } %>
-											<% if (comment.getImage2() != null) { %>
-												<div class="col-6 mb-4">
-													<img src="data:image/jpg;base64,<%=comment.getImage2()%>" class="rounded"/>
-												</div>
-											<% } %>
-											<% if (comment.getImage3() != null) { %>
-												<div class="col-6 ">
-													<img src="data:image/jpg;base64,<%=comment.getImage3()%>" class="rounded"/>
-												</div>
-											<% } %>
-											<% if (comment.getImage3() != null) { %>
-												<div class="col-6 ">
-													<img src="data:image/jpg;base64,<%=comment.getImage3()%>" class="rounded"/>
-												</div>
-											<% } %> --%>
 										</div>
 									</div>
                                 </div>
@@ -163,7 +142,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <!-- action=update對應到controller的doGet -->
                                 <div class="row">
 	                                <div class="d-grid gap-2 col-6">
-	                                	<button type="submit" name="action" value="" class="btn btn-outline-warning rounded-pill my-5">取消修改</button>
+	                                	<button type="submit" name="action" value="query" class="btn btn-outline-warning rounded-pill my-5">取消修改</button>
 	                            	</div>
 	                                <div class="d-grid gap-2 col-6">
 	                                	<button type="submit" name="action" value="update" class="btn btn-warning rounded-pill my-5">送出</button>
@@ -179,14 +158,32 @@ Comment comment = (Comment)request.getAttribute("comment");
     </main>
 
 	<%-- Scripts --%>
-	<script src="js/vendor/jquery-2.1.4.min.js"></script>
+	<script src="js/jquery-3.6.0.js"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/main.js"></script>
-<%--<script src="js/jquery.min.js"></script> 
- 	<script src="js/rating.js"></script> 
- 	<script>
- 		$('.star-rating').rating();
-	</script> --%>
+	<script>
+		function previewMultiple(event) {
+		    var images = document.getElementById("formFileMultiple");
+		    var number = images.files.length;
+		    for (i = 0; i < number; i++) {
+		        var urls = URL.createObjectURL(event.target.files[i]);
+		        document.getElementById("formFile").innerHTML += '<div class="col-4"> <img src="' + urls + '" class="rounded"/> </div>';
+		    }
+		}
+		
+		let arr = document.querySelectorAll('input[name="rating"]')
+		for (let i = 0; i <= arr.length ; i ++ ){
+			if (<%=comment.getRating()%> == arr[i]?.value) {
+				arr[i].checked = true;
+			}
+		}
+
+		const itemTb = document.getElementById("tb-select");
+		console.log('<%=comment.getItemTb()%>')
+		itemTb.value = '<%=comment.getItemTb()%>';
+	
+	</script>
+
 </body>
 
 </html>

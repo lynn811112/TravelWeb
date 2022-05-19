@@ -1,28 +1,19 @@
 package controller;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-
-import org.apache.jasper.tagplugins.jstl.core.If;
 
 import dao.CommentDAO;
 import model.Comment;
@@ -45,9 +36,9 @@ public class CommentServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession(true);
+//		HttpSession session = request.getSession(true);
 		String action = request.getParameter("action");
-		if (action == null) {
+		if (action == null || action.equals("query")) {
 			processQuery(request, response);
 		} else if (action.equals("new")) {
 			showNewForm(request, response);
@@ -92,8 +83,8 @@ public class CommentServlet extends HttpServlet {
         Comment comment = new Comment();
         comment.setItemTb(request.getParameter("itemTb"));
         comment.setItemId(Integer.parseInt(request.getParameter("itemId")));
-        comment.setUserId(Integer.parseInt(request.getParameter("userId")));
-        comment.setRate(Integer.parseInt(request.getParameter("rating")));
+        comment.setUserId(request.getParameter("userId"));
+        comment.setRating(Integer.parseInt(request.getParameter("rating")));
         comment.setContent(request.getParameter("content"));
 
         ArrayList<Part> parts = (ArrayList<Part>) request.getParts();
@@ -101,7 +92,7 @@ public class CommentServlet extends HttpServlet {
         
         InputStream is = null;
         for (int i = 0; i < parts.size(); i++) {
-        	if (parts.get(i).getContentType()!=null) {
+        	if (parts.get(i).getContentType() != null && parts.get(i).getContentType().startsWith("image") ) {
             	is = parts.get(i).getInputStream();
             	images.add(is);
         	}
@@ -118,8 +109,8 @@ public class CommentServlet extends HttpServlet {
         comment.setComId(Integer.parseInt(request.getParameter("comId")));
 		comment.setItemTb(request.getParameter("itemTb"));
         comment.setItemId(Integer.parseInt(request.getParameter("itemId")));
-        comment.setUserId(Integer.parseInt(request.getParameter("userId")));
-        comment.setRate(Integer.parseInt(request.getParameter("rate")));
+        comment.setUserId(request.getParameter("userId"));
+        comment.setRating(Integer.parseInt(request.getParameter("rating")));
         comment.setContent(request.getParameter("content"));
         
         commentDAO.update(comment);

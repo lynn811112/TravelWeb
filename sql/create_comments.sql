@@ -8,7 +8,7 @@ CREATE TABLE comments (
 	com_id int IDENTITY(1,1) NOT NULL,
 	item_tb varchar(25) NOT NULL,
 	item_id int NOT NULL,
-	user_id int NOT NULL,
+	user_id varchar(20) NOT NULL,
 	com_date date,
 	rating int,
 	content nvarchar(200),

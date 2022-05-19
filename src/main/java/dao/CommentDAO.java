@@ -21,7 +21,7 @@ public class CommentDAO implements DAO<Comment> {
 	private static final String SELECT_ALL_SQL = "SELECT * FROM comments ORDER BY com_id";
 	private static final String SELECT_ONE_SQL = "SELECT * FROM comments WHERE com_id = ?";
 	private static final String INSERT_SQL = "INSERT INTO comments VALUES (?,?,?,getdate(),?,?,?,?,?,?)";
-	private static final String UPDATE_SQL = "UPDATE comments SET item_tb=?, item_id=?, user_id=?, rate=?, content=? WHERE com_id = ?;";
+	private static final String UPDATE_SQL = "UPDATE comments SET item_tb=?, item_id=?, user_id=?, rating=?, content=? WHERE com_id = ?;";
 	private static final String DELETE_SQL = "DELETE comments WHERE com_id = ?";
 
 	@Override
@@ -36,12 +36,11 @@ public class CommentDAO implements DAO<Comment> {
 			while (rs.next()) {
 				Comment comment = new Comment(); // new一個物件(JavaBean)
 				comment.setComId(rs.getInt("com_Id")); // set此物件屬性
-				System.out.println(rs.getInt("com_Id"));
 				comment.setItemTb(rs.getString("item_tb"));
 				comment.setItemId(rs.getInt("item_id"));
-				comment.setUserId(rs.getInt("user_id"));
+				comment.setUserId(rs.getString("user_id"));
 				comment.setComDate(rs.getDate("com_date"));
-				comment.setRate(rs.getInt("rate"));
+				comment.setRating(rs.getInt("rating"));
 				comment.setContent(rs.getString("content"));
 				
 //				for (int i=1; i<=3; i++) {
@@ -78,23 +77,20 @@ public class CommentDAO implements DAO<Comment> {
 
 	@Override
 	public Comment selectOne(int id) {
-		Connection conn = null;
-		PreparedStatement pstmt;
-		ResultSet rs;
 		Comment comment = new Comment();
-		String base64Image;
 		try {
-			conn = DBConnection.getConnectionObject();
-			pstmt = conn.prepareStatement(SELECT_ONE_SQL);
+			Connection conn = DBConnection.getConnectionObject();
+			PreparedStatement pstmt = conn.prepareStatement(SELECT_ONE_SQL);
 			pstmt.setInt(1, id);
-			rs = pstmt.executeQuery();
+			ResultSet rs = pstmt.executeQuery();
+			String base64Image;
 			while (rs.next()) {
 				comment.setComId(rs.getInt("com_Id"));
 				comment.setItemTb(rs.getString("item_tb"));
 				comment.setItemId(rs.getInt("item_id"));
-				comment.setUserId(rs.getInt("user_id"));
+				comment.setUserId(rs.getString("user_id"));
 				comment.setComDate(rs.getDate("com_date"));
-				comment.setRate(rs.getInt("rate"));
+				comment.setRating(rs.getInt("rating"));
 				comment.setContent(rs.getString("content"));
 				
 				// 以判斷式確認是否為空值以免報錯
@@ -131,12 +127,13 @@ public class CommentDAO implements DAO<Comment> {
 			PreparedStatement pstmt = conn.prepareStatement(INSERT_SQL, generatedCols); // 要放進statement，才能回傳ID
 			pstmt.setString(1, comment.getItemTb());
 			pstmt.setInt(2, comment.getItemId());
-			pstmt.setInt(3, comment.getUserId());
-			pstmt.setInt(4, comment.getRate());
+			pstmt.setString(3, comment.getUserId());
+			pstmt.setInt(4, comment.getRating());
 			pstmt.setString(5, comment.getContent());
 			// insert images, insert Null if there's no one
 			for (int i=0; i<=2; i++) {
 				if (i <= comment.getImageBytes().size()-1) {
+					System.out.println(comment.getImageBytes().size());
 					pstmt.setBlob((6+i), comment.getImageBytes().get(i));	
 				} else {
 					pstmt.setNull((6+i), java.sql.Types.VARBINARY);	
@@ -164,19 +161,16 @@ public class CommentDAO implements DAO<Comment> {
 	@Override
 	public boolean update(Comment comment) {
 		boolean isUpdated = false;
-		Connection conn;
-		PreparedStatement pstmt;
-		int count;
 		try {
-			conn = DBConnection.getConnectionObject();
-			pstmt = conn.prepareStatement(UPDATE_SQL);
+			Connection conn = DBConnection.getConnectionObject();
+			PreparedStatement pstmt = conn.prepareStatement(UPDATE_SQL);
 			pstmt.setString(1, comment.getItemTb());
 			pstmt.setInt(2, comment.getItemId());
-			pstmt.setInt(3, comment.getUserId());
-			pstmt.setInt(4, comment.getRate());
+			pstmt.setString(3, comment.getUserId());
+			pstmt.setInt(4, comment.getRating());
 			pstmt.setString(5, comment.getContent());
 			pstmt.setInt(6, comment.getComId());
-			count = pstmt.executeUpdate();
+			int count = pstmt.executeUpdate();
 			if (count > 0)
 				isUpdated = true;
 			pstmt.close();
@@ -191,14 +185,11 @@ public class CommentDAO implements DAO<Comment> {
 	@Override
 	public boolean delete(int id) {
 		boolean isDeleted = false;
-		Connection conn;
-		PreparedStatement pstmt;
-		int count;
 		try {
-			conn = DBConnection.getConnectionObject();
-			pstmt = conn.prepareStatement(DELETE_SQL);
+			Connection conn = DBConnection.getConnectionObject();
+			PreparedStatement pstmt = conn.prepareStatement(DELETE_SQL);
 			pstmt.setInt(1, id);
-			count = pstmt.executeUpdate();
+			int count = pstmt.executeUpdate();
 			if (count > 0)
 				isDeleted = true;
 			pstmt.close();
@@ -213,7 +204,6 @@ public class CommentDAO implements DAO<Comment> {
 	
 	private String toBase64(Blob blob) {
 		String base64Image = null;
-		
 		try (InputStream is = blob.getBinaryStream();
 			 BufferedInputStream bis = new BufferedInputStream(is);
 			 ByteArrayOutputStream ops = new ByteArrayOutputStream()){

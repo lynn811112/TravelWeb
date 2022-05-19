@@ -10,9 +10,8 @@ Comment comment = (Comment)request.getAttribute("comment");
 %>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>評論列表</title>
-	<meta name="description" content="dashboard">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>評論列表</title>
 	<%-- style sheet (以下三個style sheet請記得link進來) --%>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
@@ -96,7 +95,7 @@ Comment comment = (Comment)request.getAttribute("comment");
 				                            <label for="first-rate1" title="Terrible">1 star</label>
 				                            <input type="radio" id="first-rate2" name="rating" value="2" />
 				                            <label for="first-rate2" title="Not good">2 stars</label>
-				                            <input type="radio" id="first-rate3" name="rating" value="3" />
+				                            <input type="radio" id="first-rate3" name="rating" value="3" checked/>
 				                            <label for="first-rate3" title="Average">3 stars</label>
 				                            <input type="radio" id="first-rate4" name="rating" value="4" />
 				                            <label for="first-rate4" title="Very good">4 stars</label>
@@ -145,10 +144,11 @@ Comment comment = (Comment)request.getAttribute("comment");
     </main>
 
 	<%-- Scripts --%>
-	<script src="js/vendor/jquery-2.1.4.min.js"></script>
+	<script src="js/jquery-3.6.0.js"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/main.js"></script>
 	<script>
+		// 	立即顯示所選照片
 		function previewMultiple(event) {
 		    var images = document.getElementById("formFileMultiple");
 		    var number = images.files.length;
@@ -157,6 +157,16 @@ Comment comment = (Comment)request.getAttribute("comment");
 		        document.getElementById("formFile").innerHTML += '<div class="col-4"> <img src="' + urls + '" class="rounded"/> </div>';
 		    }
 		}
+		
+		// 	限制上傳照片數量(尚未完成)
+		$("#formFileMultiple").on("change", function() {
+		    if ($("#formFileMultiple")[0].files.length > 3) {
+		        alert("You can select only 3 images");
+		    } else {
+		        $("#imageUploadForm").submit();
+		    }
+		});
+		
 	</script>
 </body>
 
