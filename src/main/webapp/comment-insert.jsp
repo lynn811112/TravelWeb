@@ -79,7 +79,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 
                                 <!-- 會員ID -->
                                 <div class="mb-4 row">
-                                    <label for="item-id" class="col-sm-3 col-form-label">會員編號</label>
+                                    <label for="item-id" class="col-sm-3 col-form-label">會員帳號</label>
                                     <div class="col-sm-9">
                                       <input type="text" class="form-control" name="userId" id="item-id">
                                     </div>
@@ -95,7 +95,7 @@ Comment comment = (Comment)request.getAttribute("comment");
 				                            <label for="first-rate1" title="Terrible">1 star</label>
 				                            <input type="radio" id="first-rate2" name="rating" value="2" />
 				                            <label for="first-rate2" title="Not good">2 stars</label>
-				                            <input type="radio" id="first-rate3" name="rating" value="3" checked/>
+				                            <input type="radio" id="first-rate3" name="rating" value="3" />
 				                            <label for="first-rate3" title="Average">3 stars</label>
 				                            <input type="radio" id="first-rate4" name="rating" value="4" />
 				                            <label for="first-rate4" title="Very good">4 stars</label>
@@ -144,7 +144,7 @@ Comment comment = (Comment)request.getAttribute("comment");
     </main>
 
 	<%-- Scripts --%>
-	<script src="js/jquery-3.6.0.js"></script>
+	<script src="<%=request.getContextPath()%>/js/jquery-3.6.0.js"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/main.js"></script>
 	<script>

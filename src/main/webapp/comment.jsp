@@ -57,18 +57,17 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="card">
-						<div class="card-header py-3">
-							<strong class="card-title">評論列表</strong>
+						<div class="card-header d-flex justify-content-between align-baseline">
+							<strong class="card-title align-middle py-2 m-0">評論列表</strong>
+							<form name="form" action="comment" method="POST" >
+								<button type="submit" name="action" value="new" class="btn btn-sm btn-warning rounded-pill mx-2 mt-1">新增評論</button>
+<!-- 							<button type="submit" name="action" value="new" class="btn btn-sm btn-warning rounded-pill">一鍵新增</button> -->
+							</form>
 						</div>
 						<div class="card-body">
 							<div class="float-end mb-3">
 								
-								<form name="form" action="comment" method="POST">
-									
-										<button type="submit" name="action" value="new" class="btn btn-sm btn-warning rounded-pill">新增評論</button>
-										<button type="submit" name="action" value="new" class="btn btn-sm btn-warning rounded-pill">一鍵新增</button>
-								
-								</form>
+
 							</div>
 							<table id="table_id" class="display table table-hover" style="width: 100%">
 							    <colgroup>
@@ -77,8 +76,8 @@
 							       <col span="1" style="width: 10%;">
 							       <col span="1" style="width: 10%;">
 							       <col span="1" style="width: 5%; ">
-							       <col span="1" style="width: 25%;">
-							       <col span="1" style="width: 23%;">
+							       <col span="1" style="width: 24%;">
+							       <col span="1" style="width: 24%;">
 							       <col span="1" style="width: 8%;">
 							    </colgroup>
 								<thead>
@@ -123,10 +122,14 @@
 												<% } %>
 
 											</td>
-											<td><button type="submit" name="action" value="edit" class="btn btn-outline-warning btn-sm rounded-circle">
+											<td style="padding-right: 0px">
+												<button type="submit"  name="action" value="edit" class="edit btn btn-outline-warning btn-sm rounded-circle">
 													<i class="bi bi-pencil-square"></i>
 												</button>
-												<button type="submit" name="action" value="delete" class="btn btn-outline-info btn-sm rounded-circle">
+												<button type="button" class="delete btn btn-outline-info btn-sm rounded-circle ">
+													<i class="bi bi-trash3"></i>
+												</button>
+												<button type="submit" name="action" value="delete" class="d-none">
 													<i class="bi bi-trash3"></i>
 												</button>
 											</td>
@@ -136,7 +139,7 @@
 											<td></td>
 											<td colspan="6">
 												<p>
-													Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+													之後這邊顯示該商品資訊
 												</p>
 											</td>
 											<td></td>
@@ -164,6 +167,39 @@
 	<script src="js/main.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- 	<script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.js"></script> -->
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		
+		const deleteButtons = document.querySelectorAll(".delete");
+		deleteButtons.forEach(function (deleteButton) {
+			deleteButton.addEventListener("click",function(e){
+	 			e.preventDefault();
+// 				console.log(e.target.parentNode.parentNode.parentNode.parentNode.firstChild);
+
+	 			Swal.fire({
+	 				  title: '確定刪除?',
+	 				  text: "確認刪除後將不可復原",
+	 				  imageUrl: 'css/images/remote.svg',
+	 				  imageWidth: 155,
+	 				  imageHeight: 107,
+	 				  showCancelButton: true,
+	 				  confirmButtonColor: '#FF8D29',
+	 				  cancelButtonColor: '#FFCD38',
+	 				  confirmButtonText: '確認',
+	 				  cancelButtonText: '取消',
+	 				  reverseButtons: true
+	 				}).then((result) => {
+	 				  if (result.isConfirmed) {
+	 					  console.log(e.target.parentNode.nextElementSibling);
+	 					  e.target.parentNode.nextElementSibling.click();
+	 				  }
+	 				})
+			})
+
+		})
+
+	</script>
 
 </body>
 

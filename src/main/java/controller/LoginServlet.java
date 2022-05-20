@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.EmployeeDAO;
 import model.Employee;
@@ -39,16 +40,18 @@ public class LoginServlet extends HttpServlet {
 		if (employee != null) {
 			if (userId != null && password != null && password.equals(employee.getPassword())) {
 				isLoggedIn = true;
+				HttpSession session = request.getSession(true);
+				session.setAttribute("login", employee);
 				request.setAttribute("user", employee);
 				request.setAttribute("isLoggedIn", isLoggedIn);
 				request.getRequestDispatcher("/index.jsp").forward(request, response);
 			} else {
-				System.out.println("Id is found but incorrect password");
+				System.out.println("此ID存在但密碼不正確");
 				request.setAttribute("isLoggedIn", isLoggedIn);
 				request.getRequestDispatcher("/login.jsp").forward(request, response);	
 			}
 		} else {
-			System.out.println("Can not find this Id");
+			System.out.println("員工資料找不到此ID");
 			request.setAttribute("isLoggedIn", isLoggedIn);
 			request.getRequestDispatcher("/login.jsp").forward(request, response);	
 		}

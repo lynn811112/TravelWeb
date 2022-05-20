@@ -81,7 +81,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 
                                 <!-- 會員ID -->
                                 <div class="mb-4 row">
-                                    <label for="item-id" class="col-sm-3 col-form-label">會員編號</label>
+                                    <label for="item-id" class="col-sm-3 col-form-label">會員帳號</label>
                                     <div class="col-sm-9">
                                       <input type="text" class="form-control" name="userId" id="item-id" value="<%=comment.getUserId()%>">
                                     </div>
@@ -118,22 +118,28 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <div class="mb-4 row">
                                 	<label for="images" class="col-sm-3 col-form-label">上傳照片</label>
                                 	<div class="col-sm-9">
-	                                 	<div class="row">
-											<% if (comment.getImage1() != null) { %>
-												<div class="col-4">
-													<img src="data:image/jpg;base64,<%=comment.getImage1()%>" class="rounded"/>
-												</div>
-											<% } %>
-											<% if (comment.getImage2() != null) { %>
-												<div class="col-4">
-													<img src="data:image/jpg;base64,<%=comment.getImage2()%>" class="rounded"/>
-												</div>
-											<% } %>
-											<% if (comment.getImage3() != null) { %>
-												<div class="col-4">
-													<img src="data:image/jpg;base64,<%=comment.getImage3()%>" class="rounded"/>
-												</div>
-											<% } %>
+								  		<input class="form-control" type="file" name="images" id="formFileMultiple" multiple onchange="previewMultiple(event)">
+										<label for="images" class="form-label custom-file-label"></label>
+									</div>
+									<div class="row justify-content-end"> 
+	                                	<div class="col-sm-9">
+		                                 	<div class="row">
+												<% if (comment.getImage1() != null) { %>
+													<div class="col-4">
+														<img src="data:image/jpg;base64,<%=comment.getImage1()%>" class="rounded"/>
+													</div>
+												<% } %>
+												<% if (comment.getImage2() != null) { %>
+													<div class="col-4">
+														<img src="data:image/jpg;base64,<%=comment.getImage2()%>" class="rounded"/>
+													</div>
+												<% } %>
+												<% if (comment.getImage3() != null) { %>
+													<div class="col-4">
+														<img src="data:image/jpg;base64,<%=comment.getImage3()%>" class="rounded"/>
+													</div>
+												<% } %>
+											</div>
 										</div>
 									</div>
                                 </div>
@@ -179,7 +185,6 @@ Comment comment = (Comment)request.getAttribute("comment");
 		}
 
 		const itemTb = document.getElementById("tb-select");
-		console.log('<%=comment.getItemTb()%>')
 		itemTb.value = '<%=comment.getItemTb()%>';
 	
 	</script>

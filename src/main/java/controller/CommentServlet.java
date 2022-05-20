@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -13,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import dao.CommentDAO;
@@ -21,8 +23,8 @@ import model.Comment;
 @WebServlet("/comment")
 
 @MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
-maxFileSize=1024*1024*10,      // 10MB
-maxRequestSize=1024*1024*50)   // 50MB
+				 maxFileSize=1024*1024*10,      // 10MB
+				 maxRequestSize=1024*1024*50)   // 50MB
 
 public class CommentServlet extends HttpServlet {
 	
@@ -32,30 +34,40 @@ public class CommentServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		commentDAO = new CommentDAO();
+
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-//		HttpSession session = request.getSession(true);
-		String action = request.getParameter("action");
-		if (action == null || action.equals("query")) {
-			processQuery(request, response);
-		} else if (action.equals("new")) {
-			showNewForm(request, response);
-		} else if (action.equals("insert")) {
-			processInsert(request, response);
-		} else if (action.equals("edit")) {
-			showEditForm(request, response);
-		} else if (action.equals("update")) {
-			processUpdate(request, response);
-		} else if (action.equals("delete")) {
-			processDelete(request, response);
-		} 
+		doPost(request, response);
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
-		doGet(request, response);
+        HttpSession session = request.getSession();
+        
+        Optional<Object> token = Optional.ofNullable(session.getAttribute("login"));
+
+
+        if(token.isPresent()) {
+    		request.setCharacterEncoding("UTF-8");
+    		String action = request.getParameter("action");
+    		if (action == null || action.equals("query")) {
+    			processQuery(request, response);
+    		} else if (action.equals("new")) {
+    			showNewForm(request, response);
+    		} else if (action.equals("insert")) {
+    			processInsert(request, response);
+    		} else if (action.equals("edit")) {
+    			showEditForm(request, response);
+    		} else if (action.equals("update")) {
+    			processUpdate(request, response);
+    		} else if (action.equals("delete")) {
+    			processDelete(request, response);
+    		} 
+		
+		} else {
+            response.sendRedirect("login.jsp");
+        }
 	}
 	
 	
@@ -81,11 +93,11 @@ public class CommentServlet extends HttpServlet {
 	
 	public void processInsert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Comment comment = new Comment();
-        comment.setItemTb(request.getParameter("itemTb"));
+        comment.setItemTb(request.getParameter("itemTb").trim());
         comment.setItemId(Integer.parseInt(request.getParameter("itemId")));
         comment.setUserId(request.getParameter("userId"));
         comment.setRating(Integer.parseInt(request.getParameter("rating")));
-        comment.setContent(request.getParameter("content"));
+        comment.setContent(request.getParameter("content").trim());
 
         ArrayList<Part> parts = (ArrayList<Part>) request.getParts();
         ArrayList<InputStream> images = new ArrayList<>();
@@ -112,7 +124,6 @@ public class CommentServlet extends HttpServlet {
         comment.setUserId(request.getParameter("userId"));
         comment.setRating(Integer.parseInt(request.getParameter("rating")));
         comment.setContent(request.getParameter("content"));
-        
         commentDAO.update(comment);
         request.setAttribute("comment", comment);
         response.sendRedirect("comment");        
@@ -126,37 +137,3 @@ public class CommentServlet extends HttpServlet {
 	}
 
 }
-
-
-/*
- * 
- * for processInsert()
- * 
- */
-
-//List<Part> parts =  (List<Part>) request.getParts();
-
-//Part filePart = request.getPart("image");
-//FileInputStream fis = new FileInputStream(filePart);
-//InputStream is = filePart.getInputStream();
-
-//
-//System.out.println("parts.size()="+ parts.size()); 
-//for (int i = 0; i <parts.size(); i++) {
-//	System.out.println("parts "+i);
-//  System.out.println(parts.get(i).getName());
-//  System.out.println(parts.get(i).getSize());
-//  System.out.println(parts.get(i).getContentType());
-//}
-
-//InputStream is = parts.get(5).getInputStream();
-//
-//
-//InputStream is = parts.get(5).getInputStream();
-//comment.setImageBytes1(is);
-
-//is = parts.get(6).getInputStream();
-//comment.setImageBytes2(is);
-
-//is = parts.get(7).getInputStream();
-//comment.setImageBytes3(is);

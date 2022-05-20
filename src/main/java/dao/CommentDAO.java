@@ -133,7 +133,6 @@ public class CommentDAO implements DAO<Comment> {
 			// insert images, insert Null if there's no one
 			for (int i=0; i<=2; i++) {
 				if (i <= comment.getImageBytes().size()-1) {
-					System.out.println(comment.getImageBytes().size());
 					pstmt.setBlob((6+i), comment.getImageBytes().get(i));	
 				} else {
 					pstmt.setNull((6+i), java.sql.Types.VARBINARY);	

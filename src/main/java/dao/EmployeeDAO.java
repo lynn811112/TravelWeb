@@ -4,12 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import model.Employee;
 import util.DBConnection;
 
-public class EmployeeDAO implements DAO<Employee>{
+public class EmployeeDAO{
 	
 	private static final String SELECT_ONE_SQL = "SELECT * FROM employees WHERE email = ?";
 
@@ -36,35 +35,4 @@ public class EmployeeDAO implements DAO<Employee>{
 		return employee;
 	}
 	
-	
-	@Override
-	public List<Employee> selectAll() {
-
-		return null;
-	}
-
-	@Override
-	public Employee selectOne(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean insert(Employee t) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean update(Employee t) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-		
 }

@@ -55,10 +55,11 @@
                                 <div class="position-absolute valid-feedback">Email格式正確!</div>
                                 <div class="position-absolute invalid-feedback">請輸入正確的Email格式</div>
                             </div>
+							<!-- password input	-->
                             <div class="col-12 mb-5 position-relative">
                                 <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
                                 <div class="position-absolute valid-feedback">密碼格式正確!</div>
-                                <div class="position-absolute invalid-feedback">請輸入正確的密碼格式</div>
+                                <div class="position-absolute invalid-feedback">請輸入密碼</div>
                             </div>
 
                             <!-- 2 column grid layout for inline styling -->
