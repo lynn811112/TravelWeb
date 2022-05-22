@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -20,6 +21,7 @@ public class CommentDAO implements DAO<Comment> {
 
 	private static final String SELECT_ALL_SQL = "SELECT * FROM comments ORDER BY com_id";
 	private static final String SELECT_ONE_SQL = "SELECT * FROM comments WHERE com_id = ?";
+	private static final String SELECT_COUNT_SQL = "SELECT count(*) FROM comments;";
 	private static final String INSERT_SQL = "INSERT INTO comments VALUES (?,?,?,getdate(),?,?,?,?,?,?)";
 	private static final String UPDATE_SQL = "UPDATE comments SET item_tb=?, item_id=?, user_id=?, rating=?, content=? WHERE com_id = ?;";
 	private static final String DELETE_SQL = "DELETE comments WHERE com_id = ?";
@@ -43,14 +45,7 @@ public class CommentDAO implements DAO<Comment> {
 				comment.setRating(rs.getInt("rating"));
 				comment.setContent(rs.getString("content"));
 				
-//				for (int i=1; i<=3; i++) {
-//					if (rs.getBlob("image"+i) != null) {
-//						System.out.println(rs.getBlob("image"+i));
-//						base64Image = toBase64(rs.getBlob("image"+i));
-//						imageList.add(base64Image);
-//					}
-//				}
-//				comment.setImageStrs(imageList);
+
 				if (rs.getBlob("image1") != null) {
 					base64Image = toBase64(rs.getBlob("image1"));
 					comment.setImage1(base64Image);
@@ -124,21 +119,19 @@ public class CommentDAO implements DAO<Comment> {
 		String[] generatedCols = { "comId" }; // 取得auto-generated的ID
 		try {
 			Connection conn = DBConnection.getConnectionObject();
-			PreparedStatement pstmt = conn.prepareStatement(INSERT_SQL, generatedCols); // 要放進statement，才能回傳ID
+			PreparedStatement pstmt = conn.prepareStatement(INSERT_SQL, generatedCols);  
 			pstmt.setString(1, comment.getItemTb());
 			pstmt.setInt(2, comment.getItemId());
 			pstmt.setString(3, comment.getUserId());
 			pstmt.setInt(4, comment.getRating());
 			pstmt.setString(5, comment.getContent());
-			// insert images, insert Null if there's no one
 			for (int i=0; i<=2; i++) {
 				if (i <= comment.getImageBytes().size()-1) {
 					pstmt.setBlob((6+i), comment.getImageBytes().get(i));	
 				} else {
-					pstmt.setNull((6+i), java.sql.Types.VARBINARY);	
+					pstmt.setNull((6+i), java.sql.Types.VARBINARY);	// insert images, insert Null if there's no one
 				}
 			}
-			// status initially set to be y(yes)
 			pstmt.setString(9, "y");
 			pstmt.executeUpdate();
 			ResultSet rs = pstmt.getGeneratedKeys();
@@ -154,7 +147,6 @@ public class CommentDAO implements DAO<Comment> {
 			DBConnection.closeConnection();
 		}
 		return isInserted;
-
 	}
 
 	@Override
@@ -201,7 +193,28 @@ public class CommentDAO implements DAO<Comment> {
 	}
 	
 	
-	private String toBase64(Blob blob) {
+	public int selectCount() {
+		int count = 0;
+		try {
+			Connection conn = DBConnection.getConnectionObject();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(SELECT_COUNT_SQL);
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return count;
+		
+	}
+	
+	
+	
+	public String toBase64(Blob blob) {
 		String base64Image = null;
 		try (InputStream is = blob.getBinaryStream();
 			 BufferedInputStream bis = new BufferedInputStream(is);

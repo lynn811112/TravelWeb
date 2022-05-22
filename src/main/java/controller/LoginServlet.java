@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("login", employee);
 				request.setAttribute("user", employee);
 				request.setAttribute("isLoggedIn", isLoggedIn);
-				request.getRequestDispatcher("/index.jsp").forward(request, response);
+				request.getRequestDispatcher("/index").forward(request, response);
 			} else {
 				System.out.println("此ID存在但密碼不正確");
 				request.setAttribute("isLoggedIn", isLoggedIn);

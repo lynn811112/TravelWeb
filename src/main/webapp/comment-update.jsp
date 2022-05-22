@@ -75,7 +75,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <div class="mb-4 row">
                                     <label for="item-id" class="col-sm-3 col-form-label">商品編號</label>
                                     <div class="col-sm-9">
-                                      <input type="text" class="form-control" name="itemId" id="item-id" value="<%=comment.getItemId()%>">
+                                      <input type="number" class="form-control" name="itemId" id="item-id" value="<%=comment.getItemId()%>">
                                     </div>
                                 </div>
                                 
@@ -155,7 +155,6 @@ Comment comment = (Comment)request.getAttribute("comment");
 	                            	</div>
 								</div>
                             </form>
-                            
                         </div>
                     </div>
                 </div>
@@ -164,9 +163,9 @@ Comment comment = (Comment)request.getAttribute("comment");
     </main>
 
 	<%-- Scripts --%>
-	<script src="js/jquery-3.6.0.js"></script>
-	<script src="js/plugins.js"></script>
-	<script src="js/main.js"></script>
+	<script src="<%=request.getContextPath()%>/js/jquery-3.6.0.js"></script>
+	<script src="<%=request.getContextPath()%>/js/plugins.js"></script>
+	<script src="<%=request.getContextPath()%>/js/main.js"></script>
 	<script>
 		function previewMultiple(event) {
 		    var images = document.getElementById("formFileMultiple");

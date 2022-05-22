@@ -42,13 +42,12 @@ public class CommentServlet extends HttpServlet {
 
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)	
+			throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
         Optional<Object> token = Optional.ofNullable(session.getAttribute("login"));
 
-
-        if(token.isPresent()) {
+        if(token.isPresent()) { // 判斷client端有無token
     		request.setCharacterEncoding("UTF-8");
     		String action = request.getParameter("action");
     		if (action == null || action.equals("query")) {
@@ -64,7 +63,6 @@ public class CommentServlet extends HttpServlet {
     		} else if (action.equals("delete")) {
     			processDelete(request, response);
     		} 
-		
 		} else {
             response.sendRedirect("login.jsp");
         }
@@ -91,19 +89,21 @@ public class CommentServlet extends HttpServlet {
         dispatcher.forward(request, response);
 	}
 	
-	public void processInsert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	// 呼叫DAO執行Insert
+	public void processInsert(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
         Comment comment = new Comment();
         comment.setItemTb(request.getParameter("itemTb").trim());
         comment.setItemId(Integer.parseInt(request.getParameter("itemId")));
         comment.setUserId(request.getParameter("userId"));
         comment.setRating(Integer.parseInt(request.getParameter("rating")));
         comment.setContent(request.getParameter("content").trim());
-
+        // 以.getParts()將圖片檔以二進位制放到資料庫
         ArrayList<Part> parts = (ArrayList<Part>) request.getParts();
         ArrayList<InputStream> images = new ArrayList<>();
-        
         InputStream is = null;
         for (int i = 0; i < parts.size(); i++) {
+        	// ContentType()為image 
         	if (parts.get(i).getContentType() != null && parts.get(i).getContentType().startsWith("image") ) {
             	is = parts.get(i).getInputStream();
             	images.add(is);
