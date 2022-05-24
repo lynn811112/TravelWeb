@@ -14,7 +14,7 @@
 				
 				<li class="menu-title">項目管理</li>
 				<li><a href="member"><i class="menu-icon fa bi bi-person-fill"></i>會員管理</a></li>
-				<li><a href="#"><i class="menu-icon fa bi bi-file-earmark-text-fill"></i>訂單管理</a></li>
+				<li><a href="OrderServletOS"><i class="menu-icon fa bi bi-file-earmark-text-fill"></i>訂單管理</a></li>
 				<li><a href="View_pro"><i class="menu-icon fa bi bi-briefcase-fill"></i>行程管理</a></li>
 				<li><a href="user-list.jsp"><i class="menu-icon fa bi bi-house-door-fill"></i>住宿管理</a></li>
 				<li><a href="#"><i class="menu-icon fa bi-signpost-2-fill"></i>租車管理</a></li>

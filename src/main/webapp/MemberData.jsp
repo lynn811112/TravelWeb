@@ -24,7 +24,8 @@
   		height:70px;
 	}
 	h1{
-	text-align: center
+	text-align: center;
+	font-weight: bolder;
 	}
 	
 /* 	.btn-round { */
@@ -34,11 +35,11 @@
 
 </head>
 <body>
-<%
-List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas");
-%>
+<%List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas");%>
+
 <%@include file="jspf/sidebar.jspf"%>
-	<main id="right-panel" class="right-panel">
+
+<main id="right-panel" class="right-panel">
 		<div class="breadcrumbs">
 			<div class="breadcrumbs-inner">
 				<div class="row m-0">
@@ -52,7 +53,6 @@ List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas")
 				</div>
 			</div>
 		</div>
-		<div class="float-end mb-3">
 		<div class="content">
 			<div class="row justify-content-center">
 				<div class="col-sm-12">
@@ -68,8 +68,6 @@ List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas")
 					<button type="submit" name="action" value="new"
 						class="btn btn-sm btn-warning rounded-pill">新增會員資料</button>
 					
-					<button type="submit" name="action" value="query"
-						class="btn btn-sm btn-warning rounded-pill">查詢</button>
 					
 				</form>
 			</div>
@@ -84,8 +82,6 @@ List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas")
 										<th>性別</th>
 										<th>生日</th>
 										<th>電話</th>
-										<th>縣市</th>
-										<th>地區</th>
 										<th>完整地址</th>
 										<th>管理</th>
 									</tr>
@@ -105,8 +101,7 @@ List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas")
 											<td><%=memData.getGender()%></td>
 											<td><%=memData.getBirthday()%></td>
 											<td><%=memData.getPhone()%></td>
-											<td><%=memData.getCity()%></td>
-											<td><%=memData.getLocation()%></td>
+											
 											<td><%=memData.getAddress()%></td>
 											
 											<td><button type="submit" name="action" value="edit" class="btn btn-outline-warning btn-sm rounded-circle"
@@ -114,8 +109,7 @@ List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas")
 													<i class="bi bi-pencil-square"></i>
 												</button>
 												
-												<button type="submit" name="action" value="delete" class="btn btn-outline-info btn-sm rounded-circle">
-													<i class="bi bi-trash3"></i>
+												<button id="btn" class="btn btn-outline-info btn-sm rounded-circle"><i class="bi bi-slash-circle"></i>
 												</button>
 											</td>
 										</tr>
@@ -131,7 +125,6 @@ List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas")
 				</div>
 			</div>
 		</div>
-	</div>
 
 	</main>
 	
@@ -141,5 +134,23 @@ List<JdbcData> memberDatas = (List<JdbcData>)request.getAttribute("memberDatas")
 	<script src="<%=request.getContextPath()%>/js/plugins.js"></script>
 	<script src="<%=request.getContextPath()%>/js/main.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+	functionsure(key){
+//這些代碼是javascript的代碼，需要包含在script標簽中
+
+if(confirm("確認刪除？"))
+{
+alert('已刪除');
+}
+else
+{
+alert('取消')
+}
+var oBtn = document.getElementById('btn');
+btn.style.backgroundColor="";
+oBtn.onclick = function(){
+	this.style.backgroundColor = 'red';
+}
+</script>
 </body>
 </html>

@@ -18,7 +18,11 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import dao.CommentDAO;
+import dao.Fun_HotelDAO;
+import dao.view_pro_Dao;
 import model.Comment;
+import model.Hotel;
+import model.view_pro;
 
 @WebServlet("/comment")
 
@@ -78,7 +82,13 @@ public class CommentServlet extends HttpServlet {
 	}
 
 	public void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect("comment-insert.jsp");
+		Fun_HotelDAO funDAO = new Fun_HotelDAO();
+		List<Hotel> hotels = funDAO.selectAll();
+		List<view_pro> listView_pro = view_pro_Dao.selectAll();
+		request.setAttribute("hotels", hotels);
+		request.setAttribute("tickets", listView_pro);
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("comment-insert.jsp");
+		requestDispatcher.forward(request, response);
 	}
 	
 	public void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

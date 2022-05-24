@@ -141,7 +141,7 @@
 								 <div class="mb-4 row">
                                     <label class="col-sm-3 col-form-label">電話</label>
                                     <div class="col-sm-9">
-	                                    <input type='text' name="phone" required="required" maxlength="10" data-minlength="10" pattern="09\d{2}\d{6}"/ placeholder="請輸入手機號碼"  value="<c:out value='${view_pro.phone}' />">
+	                                    <input type='text' name="phone" required="required" maxlength="10" data-minlength="10"  placeholder="請輸入電話號碼"  value="<c:out value='${view_pro.phone}' />">
                                     </div>
                                 </div>
 								<!-- 國家 -->

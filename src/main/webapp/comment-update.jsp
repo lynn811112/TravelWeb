@@ -24,9 +24,6 @@ Comment comment = (Comment)request.getAttribute("comment");
 			height:100%;
 		} 
 		
-/* 		.img-square { */
-/* 		width: 47%; */
-/* 		} */
 	</style>
 </head>
 
@@ -63,7 +60,7 @@ Comment comment = (Comment)request.getAttribute("comment");
                                     <label for="tb-select" class="col-sm-3 col-form-label">項目類別</label>
                                     <div class="col-sm-9">
                                         <select class="form-select" name="itemTb" id="tb-select" >
-                                            <option value="ticket">景點票券</option>
+                                            <option value="ticket">行程</option>
                                             <option value="restaurant">餐廳</option>
                                             <option value="hotel">住宿</option>
                                             <option value="carRental">租車</option>
@@ -158,6 +155,16 @@ Comment comment = (Comment)request.getAttribute("comment");
                         </div>
                     </div>
                 </div>
+           
+           		<div class="col-lg-6"> 
+           			<div class="card">
+           				<div class="card-body">
+           					<h4 class="card-title">商品資訊</h4>
+          					<div id="info">
+          					</div>
+           				</div>
+           			</div>
+           		</div>
             </div>
         </div>
     </main>
@@ -185,6 +192,69 @@ Comment comment = (Comment)request.getAttribute("comment");
 
 		const itemTb = document.getElementById("tb-select");
 		itemTb.value = '<%=comment.getItemTb()%>';
+		
+		jQuery(document).ready(function($){
+	        $(function() {
+	        	loadInfo();
+	        	
+	        	function loadInfo() {
+					$.ajax({
+	                    type: 'GET',
+	                    url: 'findItem',
+	                    dataType: 'json',
+	                    data: {
+	                    	"select": "tickets"
+	                    },
+	                    success: function (data) {
+	                    	popUpInfo("<%=comment.getItemTb()%>",<%=comment.getItemId()%>)
+	                    },
+	                    
+	                    error: function () {
+	                        console.log('error')
+	                    }
+	                })
+				}
+				
+				
+				function popUpInfo(item, id) {
+				    $.ajax({
+				        type: 'POST',
+				        url: 'findItem',
+				        dataType: 'json',
+				        data: {
+				            "itemTb": item,
+				            "itemId": id
+				        },
+				        success: function (response) {
+				            let str = JSON.stringify(response)
+				            let parsed = JSON.parse(str);
+				            let itemInfo = "商品資訊"
+				            if (String(parsed.tableName) == "住宿") {
+				                itemInfo = "商品項目：" + parsed.tableName +
+				                    "<br>商品編號：" + parsed.itemId +
+				                    "<br>商品名稱：" + parsed.itemName +
+				                    "<br>商品價格：NT$" + parsed.price +
+				                    "<br>賣家：　　" + parsed.owner +
+				                    "<br>電話：　　" + parsed.phone;
+				            } else if (String(parsed.tableName) == "行程") {
+				                itemInfo = "商品項目：" + parsed.tableName +
+				                    "<br>商品編號：" + parsed.itemId +
+				                    "<br>商品名稱：" + parsed.itemName +
+				                    "<br>商品價格：NT$" + parsed.price +
+				                    "<br>電話：　　" + parsed.phone +
+				                    "<br>地址：　　" + parsed.city + parsed.district + parsed.address +
+				                    "<br>商品介紹：<br>" + parsed.info;
+				            }
+				            $('#info').html('<div class="text-dark text-start">' + itemInfo + '</div>')
+				        },
+				        error: function () {
+				            console.log('error')
+				        }
+				    })
+				}
+	        	
+	        })
+		})
 	
 	</script>
 

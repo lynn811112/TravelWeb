@@ -149,7 +149,7 @@ font-family: Times New Roman;
 														<i class="bi bi-pencil-square"></i>編輯
 													</a>
 													<br> 
-													<a href="Delete_view_pro?prod_no=<c:out value='${view_pro.prod_no}'/>">
+													<a href="Delete_view_pro?prod_no=<c:out value='${view_pro.prod_no}'/>" onclick="javascript:return del()">
 														<%--type="submit" name="action" value="Delete_view_pro" class="btn btn-outline-warning btn-sm"  --%>
 														<i class="bi bi-trash3 "></i>刪除
 													</a>
@@ -170,5 +170,15 @@ font-family: Times New Roman;
 	<script src="<%=request.getContextPath()%>/js/main.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 	<script src="https://demeter.5fpro.com/tw/zipcode-selector.js"></script>
+	<script>
+	function del() {
+		var msg = "確定要刪除這筆會員資料嗎？";
+		if (confirm(msg)==true){
+		return true;
+		}else{
+		return false;
+		}
+	}
+	</script>
 
 </body>

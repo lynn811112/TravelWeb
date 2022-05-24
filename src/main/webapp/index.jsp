@@ -46,7 +46,10 @@
 											<h4 class="card-title fw-bold text-info">會員總數</h4>
 										</div>
 										<div class="col">
-											<h3 class="card-title">10</h3>
+											<%
+											int orderCount = (int) request.getAttribute("orderCount");
+											%>
+											<h3 id="orderCount" class="card-title"></h3>
 											<h4 class="card-title fw-bold text-info">訂單總數</h4>
 										</div>
 										<div class="col">
@@ -73,7 +76,7 @@
 											<h4 class="card-title fw-bold text-warning">住宿總數</h4>
 										</div>
 										<div class="col">
-											<h3 class="card-title">10</h3>
+											<h3 class="card-title"></h3>
 											<h4 class="card-title fw-bold text-warning">租車總數</h4>
 										</div>
 									</div>
@@ -139,6 +142,9 @@
 		const productConUp = new countUp.CountUp("productCount", <%=productCount%>, options)
 		productConUp.start();
 		
+		const orderConUp = new countUp.CountUp("orderCount", <%=orderCount%>, options)
+		orderConUp.start();
+		
 		<%Employee employee = (Employee)session.getAttribute("login"); %>
 		let userEmail = "<%=employee.getEmail()%>";
 		userId = userEmail.substring(0, userEmail.indexOf('@'))
@@ -153,10 +159,10 @@
 		const myChart = new Chart(ctx, {
 		    type: 'bar',
 		    data: {
-		        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+		        labels: ['會員總數', '訂單總數', '評論總數', '行程總數', '住宿總數', '租車總數'],
 		        datasets: [{
-		            label: '# of Votes',
-		            data: [12, 19, 3, 5, 2, 3],
+		            label: '資料總數統計長條圖',
+		            data: [<%=memberCount%>, <%=orderCount%>, <%=commentCount%>, <%=productCount%>, <%=hotelCount%>, 3],
 		            backgroundColor: [
 		                'rgba(255, 99, 132, 0.2)',
 		                'rgba(54, 162, 235, 0.2)',

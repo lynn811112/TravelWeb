@@ -19,6 +19,11 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style-comment.css">
 <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css" rel="stylesheet">
 <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.css"> -->
+<style>
+	.comId {
+		text-decoration: underline;
+	}
+</style>
 </head>
 
 <body>
@@ -150,6 +155,7 @@
 	<script src="<%=request.getContextPath()%>/js/jquery-3.6.0.js"></script>
 	<script src="<%=request.getContextPath()%>/js/plugins.js"></script>
 	<script src="<%=request.getContextPath()%>/js/main.js"></script>
+	<script src="<%=request.getContextPath()%>/js/data.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- 	<script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.js"></script> -->
@@ -157,6 +163,7 @@
 
 	<script>
 		
+		// 確認刪除提示
 		const deleteButtons = document.querySelectorAll(".delete");
 		deleteButtons.forEach(function (deleteButton) {
 			deleteButton.addEventListener("click",function(e){
@@ -185,30 +192,46 @@
 
 		jQuery(document).ready(function($){
 			$(function () {
+				// 呈現該評論所屬商品之資訊
 				<% for (Comment comment : comments) { %>
 					$('#anchor<%=comment.getComId()%>').on('click', function findItem() {
-		                $.ajax({
-		                    type: 'POST',
-		                    url: 'findItem',
-		                    dataType: 'json',
-		                    data: $('#form<%=comment.getComId()%>').serialize(),
-		                    success: function (response) {
-		                    	let str = JSON.stringify(response)
-		                    	let parsed = JSON.parse(str); 
-		                    	let itemInfo = "商品項目: "+ parsed.tableName +
-				            				   	"<br>商品名稱: "+ parsed.itemName +
-				            				   	"<br>商品價格: "+ parsed.price +
-				            				   	"<br>賣家: "+ parsed.owner +
-				            				   	"<br>電話: "+ parsed.phone;
-		                    	Swal.fire({
-		                    		html: '<div class="text-dark text-start">'+itemInfo+'</div>',
-		                    		confirmButtonColor: '#FF8D29',
-		        	 			})
-		                    },
-		                    error: function () {
-		                        console.log('error')
-		                    }
-		                })
+						$.ajax({
+							type: 'POST',
+							url: 'findItem',
+							dataType: 'json',
+							data: {
+								"itemTb": "<%=comment.getItemTb()%>",
+								"itemId": <%=comment.getItemId()%>
+							},
+							success: function (response) {
+								let str = JSON.stringify(response)
+								let parsed = JSON.parse(str);
+								let itemInfo = "商品資訊"
+								if (String(parsed.tableName) == "住宿") {
+									itemInfo = "商品項目：" + parsed.tableName +
+										"<br>商品編號：" + parsed.itemId +
+										"<br>商品名稱：" + parsed.itemName +
+										"<br>商品價格：NT$" + parsed.price +
+										"<br>賣家：　　" + parsed.owner +
+										"<br>電話：　　" + parsed.phone;
+								} else if (String(parsed.tableName) == "行程") {
+									itemInfo = "商品項目：" + parsed.tableName +
+										"<br>商品編號：" + parsed.itemId +
+										"<br>商品名稱：" + parsed.itemName +
+										"<br>商品價格：NT$" + parsed.price +
+										"<br>電話：　　" + parsed.phone +
+										"<br>地址：　　" + parsed.city + parsed.district + parsed.address +
+										"<br>商品介紹：<br>" + parsed.info;
+								}
+								Swal.fire({
+									html: '<div class="text-dark text-start small">' + itemInfo + '</div>',
+									confirmButtonColor: '#FF8D29',
+								})
+							},
+							error: function () {
+								console.log('error')
+							}
+						})
 		            })
 				<% } %>
 	        })

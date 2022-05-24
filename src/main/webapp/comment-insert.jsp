@@ -1,5 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="model.Employee"%>
+<%@page import="model.Hotel"%>
+<%@page import="java.util.List"%>
 
 <!doctype html>
 <html class="no-js" lang="">
@@ -23,6 +25,11 @@
 	.image img{
 	    position:absolute;
 	}
+	
+/* 	.btn-sm { */
+/* 		width: 15px; */
+/* 		height: 15px */
+/* 	} */
 	</style>
 </head>
 
@@ -58,7 +65,7 @@
                                     <label for="tb-select" class="col-sm-3 col-form-label">項目類別</label>
                                     <div class="col-sm-9">
                                         <select class="form-select" name="itemTb" id="tb-select" required>
-                                            <option value="ticket">景點票券</option>
+                                            <option value="ticket">行程</option>
                                             <option value="restaurant">餐廳</option>
                                             <option value="hotel">住宿</option>
                                             <option value="carRental">租車</option>
@@ -148,15 +155,44 @@
 
                                 <div class="row">
 	                                <div class="d-grid gap-2 col-6">
-	                                	<a class="btn btn-outline-warning rounded-pill my-5" href="comment">取消新增</a>
+	                                	<a class="btn btn-outline-warning rounded-pill mt-5 mb-4" href="comment">取消新增</a>
 <!-- 	                                	<a >取消新增</button> -->
 	                            	</div>
 	                                <div class="d-grid gap-2 col-6">
-	                                	<button type="submit" name="action" value="insert" class="btn btn-warning rounded-pill my-5">送出</button>
+	                                	<button type="submit" name="action" value="insert" class="btn btn-warning rounded-pill mt-5 mb-4">送出</button>
 	                            	</div>
 								</div>
                             </form>
                             
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 ">
+                    <div class="card">
+                        <div class="card-body">
+                        	<div class="d-flex justify-content-center">
+	                        	<button type="submit" name="select" id="btn-ticket" value="ticket" class="btn btn-outline-dark mb-3 mx-1">行程列表</button>
+	                        	<button type="submit" name="select" id="btn-resaturant" value="resaturant" class="btn btn-outline-dark mb-3 mx-1">餐廳列表</button>
+	                        	<button type="submit" name="select" id="btn-hotel" value="hotel" class="btn btn-outline-dark mb-3 mx-1">住宿列表</button>
+	                        	<button type="submit" name="select" id="btn-carRental" value="carRental" class="btn btn-outline-dark mb-3 mx-1">租車列表</button>
+							</div>
+                        	<table id="table_id" class="display table table-hover">
+								<thead>
+									<tr class="text-center">
+
+										<th>項目</th>
+										<th>編號</th>
+										<th>名稱</th>
+										<th>內容</th>
+									</tr>
+								</thead>
+								<tbody id="rows">
+									<tr>
+										<td style="text-align: center;" colspan="4">點選上方選項以載入項目列表</td>
+									</tr>
+								</tbody>
+							</table>
                         </div>
                     </div>
                 </div>
@@ -170,6 +206,7 @@
 	<script src="<%=request.getContextPath()%>/js/jquery-3.6.0.js"></script>
 	<script src="<%=request.getContextPath()%>/js/plugins.js"></script>
 	<script src="<%=request.getContextPath()%>/js/main.js"></script>
+	<script src="<%=request.getContextPath()%>/js/data.js"></script>
 	<script>
 		// 以帳號(Email)去掉@後文字作為預設留言者Id
 		<%
@@ -179,32 +216,7 @@
 		userId = userEmail.substring(0, userEmail.indexOf('@'))
 		document.getElementById("user-id").value = userId;
 		
-		// 確認not null項目是否有填寫
-		(function () {
-		  'use strict'
-		  var forms = document.querySelectorAll('.needs-validation')
-		  Array.prototype.slice.call(forms)
-		    .forEach(function (form) {
-		      form.addEventListener('submit', function (event) {
-		        if (!form.checkValidity()) {
-		          event.preventDefault()
-		          event.stopPropagation()
-		        }
-		        form.classList.add('was-validated')
-
-		      }, false)
-		    })
-		})()
-		
-		
-// 			if (!checkEmail(form.email.value)){
-// 		alert("Email 資料有誤，表單將不送出！");
-// 		return(false);	
-// 	}
-// 	alert("資料正確無誤，立刻送出表單！");
-// 	form.submit();
-// 	return(true);
-		
+	
 		// 只能是數字
 		function onlyNum() {
 			if(!((event.keyCode>=48&&event.keyCode<=57)||(event.keyCode>=96&&event.keyCode<=105)))
@@ -225,8 +237,34 @@
 		    }
 		}
 		
+		// 確認not null項目是否有填寫
+		(function () {
+		  'use strict'
+		  var forms = document.querySelectorAll('.needs-validation')
+		  Array.prototype.slice.call(forms)
+		    .forEach(function (form) {
+		      form.addEventListener('submit', function (event) {
+		        if (!form.checkValidity()) {
+		          event.preventDefault()
+		          event.stopPropagation()
+		        }
+		        form.classList.add('was-validated')
+
+		      }, false)
+		    })
+		})()
+
+		//  if (!checkEmail(form.email.value)){
+		// 		alert("Email 資料有誤，表單將不送出！");
+		// 		return(false);	
+		// 	}
+		// 	alert("資料正確無誤，立刻送出表單！");
+		// 	form.submit();
+		// 	return(true);
+		
 		jQuery(document).ready(function($){
 	        $(function() {
+	        	
 				// 限制上傳照片數量
 				$("#formFileMultiple").on("change", function() {
 					let filesLength = document.getElementById("formFileMultiple").files.length;
@@ -254,6 +292,160 @@
 					    $('#content-length').removeClass('text-danger').addClass('text-black-50')
 				    }
 				});
+
+				
+				// 顯示"行程"資訊
+				$('#btn-ticket').on('click', function() {
+					$.ajax({
+	                    type: 'GET',
+	                    url: 'findItem',
+	                    dataType: 'json',
+	                    data: {
+	                    	"select": "tickets"
+	                    },
+	                    success: function (data) {
+	                    	$("tbody").html('');
+	                    	$.each(data, function (i) {
+	                    		let str = "<tr><td style='text-align: center'>行程</td>"+
+	                    				  "<td style='text-align: center'>"+data[i].prod_no+"</td>"+
+	                    			  	  "<td>"+data[i].prod_name+"</td>"+
+		                    			  "<td class='info' style='text-align:center'><i class='bi bi-info-square'></i></td></tr>";
+	                    		$("tbody").append(str)
+	                    	})
+	        	        	$("td").on('click', function() {
+	        		        	let row = $(this).closest("tr");        
+	        		        	let item = $(row).find('td').eq(0).html();
+	        		        	let id = $(row).find('td').eq(1).html();
+	        		        	let name = $(row).find('td').eq(2).html();
+	        		            $("#item-id").val(id);
+	        		            if (item == "住宿") 
+	        		            	$("#tb-select").val("hotel")
+	        		            else if (item == "行程")
+	        		            	$("#tb-select").val("ticket")
+	        		        });
+        		            $('.info').on('click', function() {
+	        		        	let row = $(this).closest("tr");        
+	        		        	let item = $(row).find('td').eq(0).html();
+	        		        	let id = $(row).find('td').eq(1).html();
+        		            	popUpInfo(item, id);
+        		            });
+	                    },
+	                    
+	                    error: function () {
+	                        console.log('error')
+	                    }
+	                })
+				})
+				
+				
+				// 顯示"住宿"資訊
+				$('#btn-hotel').on('click', function() {
+					$.ajax({
+	                    type: 'GET',
+	                    url: 'findItem',
+	                    dataType: 'json',
+	                    data: {
+	                    	"select": "hotels"
+	                    },
+	                    success: function (data) {
+	                    	$("tbody").html('');
+	                    	let str = "";
+	                    	$.each(data, function (i) {
+	                    		str += "<tr><td style='text-align:center'>住宿</td>"+
+	                    				  "<td style='text-align:center'>"+data[i].id+"</td>"+
+	                    			  	  "<td >"+data[i].hotel_name+"</td>"+
+		                    			  "<td class='info' style='text-align:center'><i class='bi bi-info-square'></i></td></tr>";
+	                    	})
+                    		$("tbody").html(str);
+	        	        	$("td").on('click', function() {
+	        		        	let row = $(this).closest("tr");        
+	        		        	let item = $(row).find('td').eq(0).html();
+	        		        	let id = $(row).find('td').eq(1).html();
+	        		        	let name = $(row).find('td').eq(2).html();
+	        		            $("#item-id").val(id);
+	        		            if (item == "住宿") 
+	        		            	$("#tb-select").val("hotel")
+	        		            else if (item == "行程")
+	        		            	$("#tb-select").val("ticket")
+	        		        });
+        		            $('.info').on('click', function() {
+	        		        	let row = $(this).closest("tr");        
+	        		        	let item = $(row).find('td').eq(0).html();
+	        		        	let id = $(row).find('td').eq(1).html();
+        		            	popUpInfo(item, id);
+        		            });
+	                    },
+	                    
+	                    error: function () {
+	                        console.log('error')
+	                    }
+	                })
+				})
+	        	
+				
+				
+	        	$("td").on('click', function() {
+					showInfo()
+		        });
+				
+				function showInfo() {
+    		        let row = $(this).closest("tr");        
+    		        let item = $(row).find('td').eq(0).html();
+    		        let id = $(row).find('td').eq(1).html();
+    		        let name = $(row).find('td').eq(2).html();
+		        	inputValues(item, id);
+		        	popUpInfo(item, id);
+				}
+				
+				function inputValues(item, id) {
+		            if (item == "住宿") 
+		            	$("#tb-select").val("hotel")
+		            else if (item == "行程")
+		            	$("#tb-select").val("ticket")
+			        $("#item-id").val(id);
+				}
+				
+				function popUpInfo(item, id) {
+				    $.ajax({
+				        type: 'POST',
+				        url: 'findItem',
+				        dataType: 'json',
+				        data: {
+				            "itemTb": item,
+				            "itemId": id
+				        },
+				        success: function (response) {
+				            let str = JSON.stringify(response)
+				            let parsed = JSON.parse(str);
+				            let itemInfo = "商品資訊"
+				            if (String(parsed.tableName) == "住宿") {
+				                itemInfo = "商品項目：" + parsed.tableName +
+				                    "<br>商品編號：" + parsed.itemId +
+				                    "<br>商品名稱：" + parsed.itemName +
+				                    "<br>商品價格：NT$" + parsed.price +
+				                    "<br>賣家：　　" + parsed.owner +
+				                    "<br>電話：　　" + parsed.phone;
+				            } else if (String(parsed.tableName) == "行程") {
+				                itemInfo = "商品項目：" + parsed.tableName +
+				                    "<br>商品編號：" + parsed.itemId +
+				                    "<br>商品名稱：" + parsed.itemName +
+				                    "<br>商品價格：NT$" + parsed.price +
+				                    "<br>電話：　　" + parsed.phone +
+				                    "<br>地址：　　" + parsed.city + parsed.district + parsed.address +
+				                    "<br>商品介紹：<br>" + parsed.info;
+				            }
+				            Swal.fire({
+				                html: '<div class="text-dark text-start small">' + itemInfo + '</div>',
+				                confirmButtonColor: '#FF8D29',
+				            })
+				        },
+				        error: function () {
+				            console.log('error')
+				        }
+				    })
+				}
+
+
 				
 	        })
 		})

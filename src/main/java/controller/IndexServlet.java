@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import dao.CommentDAO;
 import dao.Fun_HotelDAO;
 import dao.MemberDAO;
+import dao.OrderDao;
 import dao.view_pro_Dao;
 
 @WebServlet("/index")
@@ -37,10 +38,12 @@ public class IndexServlet extends HttpServlet {
 			Fun_HotelDAO hotelDAO = new Fun_HotelDAO();
 			MemberDAO memberDAO = new MemberDAO();
 			view_pro_Dao productDAO = new view_pro_Dao();
+			OrderDao orderDAO = new OrderDao();
 			request.setAttribute("commentCount", commentDAO.selectCount());
 			request.setAttribute("hotelCount", hotelDAO.selectCount());
 			request.setAttribute("memberCount", memberDAO.selectCount());
 			request.setAttribute("productCount", productDAO.selectCount());
+			request.setAttribute("orderCount", orderDAO.selectCount());
 
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
 			requestDispatcher.forward(request, response);

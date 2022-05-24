@@ -1,4 +1,4 @@
-
+<%@page import="model.*"%>
 <%@page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -20,25 +20,10 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
 <style>
-.image {
-	position: relative;
-	overflow: hidden;
-	padding-bottom: 100%;
-}
-
-.image img {
-	position: absolute;
-}
-ul li .invisible {
-  background-image: src="data:image/png;base64,iVBORw0K";
-  height: .5rem;
-  top: .7rem;
-}
-ul li .visible {
-  background-image: src="data:image/png;base64,iVBORw0KG";
-  height: .8rem;
-  top: .55rem;
-}
+		h1{
+		text-align: center;
+		font-weight: bolder;
+		}
 </style>
 
 </head>
@@ -56,7 +41,7 @@ ul li .visible {
 					<div class="col-sm-4">
 						<div class="page-header float-left">
 							<div class="page-title">
-								<h1>新增會員資料</h1>
+								<h1>會員資料管理</h1>
 							</div>
 						</div>
 					</div>
@@ -64,13 +49,15 @@ ul li .visible {
 			</div>
 		</div>
 
-		<div class="content">
-		
+        <div class="content">
+            
 			<div class="row justify-content-center">
 				<div class="col-lg-6 ">
 					<div class="card">
-						<div class="card-body card-block">
-
+						<div class="card-header py-3">
+							<strong class="card-title">新增會員</strong>
+						</div>
+					<div class="card-body">
 							<form action="member" method="post">
      							<input type="hidden" name="action" value="insert">
 								<!-- 選擇類別 -->
@@ -87,7 +74,7 @@ ul li .visible {
 								</p>
 
 								<p class="sty">
-									<label class="t1" for="3">E-mail：</label> <input type="email" name="email" id="3">
+									<label class="t1" for="3">E-mail：</label> <input type="email" name="email" id="3" size="25">
 								</p>
 
 
@@ -104,12 +91,13 @@ ul li .visible {
 
 								<p class="sty">
 									<label for="4" class="t1">密碼：</label>
-									<input type="password" name="password" id="password" maxlength="20" required="required">
+									<input type="password" name="password" id="password" placeholder="請輸入8-20位英數混合密碼" maxlength="20" size="30" required="required" pattern="^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$">       
 									
-    								<a class="news-letter" href="#">
+    								<a>
         							<label class="checkbox">
-        							<input type="checkbox" οnclick="checkit(this.checked)"><i></i>顯示密碼</label>
+        							<input type="checkbox" id="myCheck" onclick="myFunction()"><i></i>顯示密碼</label>
     								</a>
+    								
 								</p>
 								
 								<p class="sty">
@@ -119,34 +107,18 @@ ul li .visible {
 
 								<p>
 								<label class="t1">地址：</label> 
-									<input class="js-demeter-tw-zipcode-selector" data-city="#city" data-dist="#location" placeholder="郵遞區號" size="6" /> 
-									<select id="city" name="city" placeholder="請選擇縣市" ></select> 
-									<select id="location" name="location" placeholder="請選擇鄉鎮區"></select>
+									<input type="text" class="js-demeter-tw-zipcode-selector" data-city="#city" data-dist="#location" placeholder="郵遞區號" size="6"/> 
+									<select id="city" name="city" placeholder="請選擇縣市" onchange="addressChange()"></select> 
+									<select id="location" name="location" placeholder="請選擇鄉鎮區" onchange="addressChange()"></select>
 								</p>
 								
 								<p class="sty">
-								<input type="text" name="address" value="<%=request.getAttribute("city")%>" size="40" >
+								<input type="text" name="address" id="address" size="40" >
 								</p>
-
-<!-- 								<div class="mb- row justify-content-end">
-
-									<label for="formFileMultiple" class="col-sm-3 col-form-label">上傳照片</label>
-									<div class="col-sm-9">
-										<input class="form-control" type="file" name="images"
-											id="formFileMultiple" multiple
-											onchange="previewMultiple(event)"> <label
-											for="images" class="form-label custom-file-label"></label>
-									</div>
-								</div>
-								<div class="row justify-content-end">
-									<div class="col-sm-9">
-										<div class="row" id="formFile"></div>
-									</div>
-								</div>   -->
 								<!-- 送出 -->
 								<!-- action=insert對應到controller的doGet -->
-								<button type="submit" name="action" value="invert"
-									class="btn btn-warning rounded-pill my-5" style="width:200px">確定新增</button>
+								<center><button type="submit" name="action" value="invert"
+									class="btn btn-warning rounded-pill my-5" style="width:200px" onclick="javascript:return chk()">確定新增</button></center>
 								
 							</form>
 
@@ -174,16 +146,41 @@ ul li .visible {
 			}
 		}
 	</script>
-
+    
+    <%-- 顯示密碼 --%>
 	<script>
-	function checkit(isChecked) {
-	    if (isChecked) {
-	        $("#password").prop("type", 'text');
-	    } else {
-	        $("#password").prop("type", 'password');
-	    }
-	}
+	function myFunction() {
+		  // Get the checkbox
+		  var checkBox = document.getElementById("myCheck");
+
+		  // If the checkbox is checked, translate type 'password' to 'text'
+		  if (checkBox.checked == true){
+			  $("#password").prop("type", 'text');
+		  } else {
+			  $("#password").prop("type", 'password');
+		  }
+		}
 	</script>
+	
+	<%-- 立即顯示縣市鄉鎮 --%>
+	<script type="text/javascript">
+	function addressChange() {
+        var city = document.getElementById('city').value;
+        var location = document.getElementById('location').value;
+        document.getElementById('address').value = city + location;
+    }
+	</script>
+	
+	<script type="text/javascript">
+ 	 function chk(){
+     var password=document.getElementById("password").value; 
+	 if (password.indexOf(" ")>=0) {
+	    alert("密碼不可含有空格！");
+	    return false;
+	 }
+  	}
+	</script>
+	
 </body>
 
 </html>
