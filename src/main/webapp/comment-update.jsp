@@ -120,8 +120,6 @@ Comment comment = (Comment)request.getAttribute("comment");
 									<div class="row justify-content-end"> 
 	                                	<div class="col-sm-9">
 		                                 	<div class="row">        
-		                                 	
-
         										<label for="imagesFromDB"></label>
 												<% 	
 												int sum = 0;
@@ -154,7 +152,7 @@ Comment comment = (Comment)request.getAttribute("comment");
 											</div>
 										</div>
 									</div>
-									<div class="row justify-content-end mt-5">
+									<div class="row justify-content-end">
 										<div class="col-sm-9">
 											<div class="row" id="formFile">
 											</div>
@@ -166,10 +164,10 @@ Comment comment = (Comment)request.getAttribute("comment");
                                 <!-- action=update對應到controller的doGet -->
                                 <div class="row">
 	                                <div class="d-grid gap-2 col-6">
-	                                	<button type="submit" name="action" value="query" class="btn btn-outline-warning rounded-pill my-5">取消修改</button>
+	                                	<button type="submit" name="action" value="query" class="btn btn-outline-warning rounded-pill my-4">取消修改</button>
 	                            	</div>
 	                                <div class="d-grid gap-2 col-6">
-	                                	<button type="submit" name="action" value="update" class="btn btn-warning rounded-pill my-5" id="btn-update">送出</button>
+	                                	<button type="submit" name="action" value="update" class="btn btn-warning rounded-pill my-4" id="btn-update">送出</button>
 	                            	</div>
 								</div>
                             </form>
@@ -218,13 +216,14 @@ Comment comment = (Comment)request.getAttribute("comment");
 		function previewMultiple(event) {
 		    var images = document.getElementById("images");
 		    var number = images.files.length;
-		    document.getElementById("formFile").innerHTML = ""
+		    document.getElementById("formFile").innerHTML = ''
 		    for (i = 0; i < number; i++) {
 		        var urls = URL.createObjectURL(event.target.files[i]);
 		        document.getElementById("formFile").innerHTML += 
-		        	'<div class="col-4"> <img src="' + urls + '" class="rounded"/> </div>';
+		        	'<div class="col-4 mt-5"> <img src="' + urls + '" class="rounded"/> </div>';
 		    }
 		}
+		
 		
 		// 設定原資料評分
 		let arr = document.querySelectorAll('input[name="rating"]')
@@ -255,7 +254,7 @@ Comment comment = (Comment)request.getAttribute("comment");
 					let isContentVaild = $("#content").val().length <= contentMax;
 					let isImagesVaild = imagesLength <= imagesMax;
 					
-					if ( !isUserIdVaild || !isUserIdVaild || !isImagesVaild ) {
+					if ( !isUserIdVaild || !isContentVaild || !isImagesVaild ) {
 						e.preventDefault();					
 						isUserIdVaild ? hideInvalidText($('#userId')) : showInvalidText($('#userId'));
 						isContentVaild ? hideInvalidText($('#content')) : showInvalidText($('#content'));
@@ -275,6 +274,11 @@ Comment comment = (Comment)request.getAttribute("comment");
 					selector.removeClass('is-invalid').addClass('is-valid');
 					selector.siblings('.invalid-feedback').css('display', 'none')
 				}
+				
+				$('#userId').keyup(function () {
+					if ($("form").hasClass('validated')) 
+						$('#userId').val() == '' ? showInvalidText($('#userId')) : hideInvalidText($('#userId'))
+				})
 				
 				// 顯示評論字數
 				$("#content").keyup(function(){

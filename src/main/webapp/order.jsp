@@ -21,6 +21,7 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
 <%-- -
 <%
 List<OrderBean> orderbeans = (List<OrderBean>) request.getAttribute("orderBeans");
@@ -86,17 +87,17 @@ h3 {
 									<td><c:out value="${order.userNo}" /></td>
 									<td><c:out value="${order.orderTotal}" /></td>
 									<td><c:out value="${order.orderDiscount}" /></td>
-									<td><c:out value="${order.couponId}" /></td>
-									<td><c:out value="${order.orderStatus}" /></td>
-									<td><c:out value="${order.orderPayStatus}" /></td>
+									<td class="coupon"><c:out value="${order.couponId}" /></td>
+									<td class="status"><c:out value="${order.orderStatus}" /></td>
+									<td class="paystatus"><c:out value="${order.orderPayStatus}" /></td>
 									<td><a
 										href="OrderServletOS?name=edit&orderid=<c:out value='${order.orderId}' />"
 										class="link-dark">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a
 										href="OrderServletOS?name=delete&orderid=<c:out value='${order.orderId}' />"
 										class="link-danger">Delete</a></td>
 								</tr>
-
-
+			
+									
 
 							</c:forEach>
 						</tbody>
@@ -109,10 +110,15 @@ h3 {
 	</main>
 
 	<%-- scripts --%>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.js"></script>
 	<script src="<%=request.getContextPath()%>/js/jquery-3.6.0.js"></script>
 	<script src="<%=request.getContextPath()%>/js/plugins.js"></script>
 	<script src="<%=request.getContextPath()%>/js/main.js"></script>
+	<script src="js/indexJS.js"></script> 
 
+	
+	
+	
 </body>
 
 </html>

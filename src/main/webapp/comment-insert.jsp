@@ -234,7 +234,7 @@
 					let isContentVaild = $("#content").val().length <= contentMax;
 					let isImagesVaild = $("#images")[0].files.length <= imagesMax;
 					
-					if (!isItemTbValid || !isItemIdVaild || !isUserIdVaild || !isUserIdVaild || !isImagesVaild ) {
+					if (!isItemTbValid || !isItemIdVaild || !isUserIdVaild || !isContentVaild || !isImagesVaild ) {
 						e.preventDefault();					
 						isItemTbValid ? hideInvalidText($('#itemTb')) : showInvalidText($('#itemTb'));
 						isItemIdVaild ? hideInvalidText($('#itemId')) : showInvalidText($('#itemId'));
