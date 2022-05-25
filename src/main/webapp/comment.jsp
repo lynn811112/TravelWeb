@@ -62,11 +62,11 @@
 								style="width: 100%">
 								<colgroup>
 									<col span="1" style="width: 4%;">
-									<col span="1" style="width: 15%;">
+									<col span="1" style="width: 12%;">
 									<col span="1" style="width: 10%;">
 									<col span="1" style="width: 10%;">
 									<col span="1" style="width: 5%;">
-									<col span="1" style="width: 24%;">
+									<col span="1" style="width: 27%;">
 									<col span="1" style="width: 24%;">
 									<col span="1" style="width: 8%;">
 								</colgroup>

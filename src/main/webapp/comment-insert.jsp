@@ -41,15 +41,13 @@
 	<main id="right-panel" class="right-panel">
 		<div class="breadcrumbs">
 			<div class="breadcrumbs-inner">
-				<div class="row m-0">
-					<div class="col-sm-4">
+
 						<div class="page-header float-left">
 							<div class="page-title">
 								<h1>評論管理 / 新增評論</h1>
 							</div>
 						</div>
-					</div>
-				</div>
+
 			</div>
 		</div>
 
@@ -59,51 +57,44 @@
                     <div class="card">
                         <div class="card-body card-block">
 
-                            <form name="form" action="comment" method="POST" class="form-horizontal needs-validation" enctype="multipart/form-data" novalidate>
+                            <form name="form" action="comment" method="POST" class="form-horizontal needs-validation" enctype="multipart/form-data">
                                 <!-- 選擇類別 -->
                                 <div class="mb-4 row">
-                                    <label for="tb-select" class="col-sm-3 col-form-label">項目類別</label>
+                                    <label for="itemTb" class="col-sm-3 col-form-label">項目類別</label>
                                     <div class="col-sm-9">
-                                        <select class="form-select" name="itemTb" id="tb-select" required>
+                                        <select class="form-select" name="itemTb" id="itemTb" required>
+                                        	<option value="" disabled selected hidden>請選擇類別</option>
                                             <option value="ticket">行程</option>
                                             <option value="restaurant">餐廳</option>
                                             <option value="hotel">住宿</option>
                                             <option value="carRental">租車</option>
                                         </select>
-									    <div class="invalid-feedback">
-									    	請輸入商品項目類別
-									    </div>
+									    <div class="invalid-feedback">請選擇商品項目類別</div>
                                     </div>
 
                                 </div>
                                 
                                 <!-- 輸入商品編號 -->
                                 <div class="mb-4 row">
-                                    <label for="item-id" class="col-sm-3 col-form-label">商品編號</label>
+                                    <label for="itemId" class="col-sm-3 col-form-label">商品編號</label>
                                     <div class="col-sm-9">
-                                      	<input type="number" class="form-control" name="itemId" id="item-id" onchange="onlyNum()" required >
-                                      	<div class="invalid-feedback">
-											請輸入商品編號
-									  	</div>
-
+                                      	<input type="number" class="form-control" name="itemId" id="itemId" required >
+                                      	<div class="invalid-feedback">請輸入商品編號</div>
                                     </div>
-
                                 </div>
 		
                                 <!-- 會員ID -->
                                 <div class="mb-4 row">
-                                    <label for="item-id" class="col-sm-3 col-form-label">會員帳號</label>
+                                    <label for="userId" class="col-sm-3 col-form-label">會員帳號</label>
                                     <div class="col-sm-9">
-                                      	<input type="text" class="form-control" name="userId" id="user-id" value="" required>
-                                    	<div class="invalid-feedback">
-											請輸入會員帳號
-										</div>
+                                      	<input type="text" class="form-control" name="userId" id="userId" required>
+                                    	<div class="invalid-feedback">請輸入會員帳號</div>
                                     </div>
                                 </div>
 
                                 <!-- 給予評分 -->
                                 <div class="mb-4 row">
-                                    <label for="customRange" class="col-sm-3 col-form-label">給予評分</label>
+                                    <label for="rating" class="col-sm-3 col-form-label">給予評分</label>
 			                        <div class="col-sm-9">
 				                        <fieldset class="starability-basic">
 					                        <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked/>
@@ -124,29 +115,28 @@
                                 <!-- 體驗分享 -->
                                 <div class="mb-4 row">
                                 	<div class="col-sm-3">
-                                    	<label for="content-text" class="col-form-label">評論內容</label>
+                                    	<label for="content" class="col-form-label">評論內容</label>
                                     	<div id="content-length" class="text-black-50 small">(0/200)</div>
                                 	</div>
                                     <div class="col-sm-9">
-                                        <textarea class="form-control" name="content" id="content-text" cols="30" rows="5"></textarea>
-                                        <div id="invalid-con-length" class="mt-1 small text-danger"></div>
-                                      </div>
+                                        <textarea class="form-control" name="content" id="content" cols="30" rows="5" style="resize:none"></textarea>
+                                        <div class="invalid-feedback">評論內容上限200字</div>
+                                     </div>
                                 </div>
                                 
-                                <div class=" row justify-content-end">
+                                <div class="row justify-content-end">
                                 	<div class="col-sm-3">
-									  	<label for="formFileMultiple" class="col-form-label">上傳照片</label>
-									  	<div id="files-length" class="text-black-50 small">(0/3)</div>
+									  	<label for="images" class="col-form-label">上傳照片</label>
+									  	<div id="images-length" class="text-black-50 small">(0/3)</div>
                                 	</div>
 								  	<div class="col-sm-9">
-								  		<input class="form-control" type="file" name="images" id="formFileMultiple" multiple onchange="previewMultiple(event)">
-										<div id="invalid-length" class="mt-1 small text-danger"></div>
+								  		<input class="form-control" type="file" name="images" id="images" multiple onchange="previewMultiple(event)" accept="image/*">
+										<div class="invalid-feedback">最多選取3張圖片</div>
 									</div>
 								</div>
 								<div class="row justify-content-end">
 									<div class="col-sm-9">
 										<div class="row" id="formFile">
-											
 										</div>
 									</div>
 								</div>
@@ -159,7 +149,7 @@
 <!-- 	                                	<a >取消新增</button> -->
 	                            	</div>
 	                                <div class="d-grid gap-2 col-6">
-	                                	<button type="submit" name="action" value="insert" class="btn btn-warning rounded-pill mt-5 mb-4">送出</button>
+	                                	<button type="submit" name="action" value="insert" class="btn btn-warning rounded-pill mt-5 mb-4" id="btn-insert">送出</button>
 	                            	</div>
 								</div>
                             </form>
@@ -180,7 +170,6 @@
                         	<table id="table_id" class="display table table-hover">
 								<thead>
 									<tr class="text-center">
-
 										<th>項目</th>
 										<th>編號</th>
 										<th>名稱</th>
@@ -204,6 +193,7 @@
 
 	<%-- Scripts --%>
 	<script src="<%=request.getContextPath()%>/js/jquery-3.6.0.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/plugins.js"></script>
 	<script src="<%=request.getContextPath()%>/js/main.js"></script>
 	<script src="<%=request.getContextPath()%>/js/data.js"></script>
@@ -214,20 +204,12 @@
 		%>
 		let userEmail = "<%=employee.getEmail()%>";
 		userId = userEmail.substring(0, userEmail.indexOf('@'))
-		document.getElementById("user-id").value = userId;
+		document.getElementById("userId").value = userId;
 		
 	
-		// 只能是數字
-		function onlyNum() {
-			if(!((event.keyCode>=48&&event.keyCode<=57)||(event.keyCode>=96&&event.keyCode<=105)))
-			//考慮小鍵盤上的數字鍵
-			event.returnvalue=false;
-			document.getElementById("item-number-only").innerHTML = '商品編號只能是數字'
-		}		
-		
 		// 立即顯示所選照片
 		function previewMultiple(event) {
-		    var images = document.getElementById("formFileMultiple");
+		    var images = document.getElementById("images");
 		    var number = images.files.length;
 		    document.getElementById("formFile").innerHTML = ""
 		    for (i = 0; i < number; i++) {
@@ -237,60 +219,85 @@
 		    }
 		}
 		
-		// 確認not null項目是否有填寫
-		(function () {
-		  'use strict'
-		  var forms = document.querySelectorAll('.needs-validation')
-		  Array.prototype.slice.call(forms)
-		    .forEach(function (form) {
-		      form.addEventListener('submit', function (event) {
-		        if (!form.checkValidity()) {
-		          event.preventDefault()
-		          event.stopPropagation()
-		        }
-		        form.classList.add('was-validated')
 
-		      }, false)
-		    })
-		})()
-
-		//  if (!checkEmail(form.email.value)){
-		// 		alert("Email 資料有誤，表單將不送出！");
-		// 		return(false);	
-		// 	}
-		// 	alert("資料正確無誤，立刻送出表單！");
-		// 	form.submit();
-		// 	return(true);
 		
 		jQuery(document).ready(function($){
 	        $(function() {
-	        	
-				// 限制上傳照片數量
-				$("#formFileMultiple").on("change", function() {
-					let filesLength = document.getElementById("formFileMultiple").files.length;
-					console.log(filesLength)
-					$('#files-length').text('('+filesLength+'/3)')
-				    if ($("#formFileMultiple")[0].files.length > 3) {
-				        $('#invalid-length').text('最多選取3張圖片')
-				        $('#files-length').removeClass('text-black-50').addClass('text-danger')
+	        	let contentMax = 200;
+	        	let imagesMax = 3;
+
+				// 確認表單內容
+				$('#btn-insert').click(function (e) {
+					let isItemTbValid = $('#itemTb').val() !== null;
+					let isItemIdVaild = $('#itemId').val() !== '';
+					let isUserIdVaild = $('#userId').val() !== '';
+					let isContentVaild = $("#content").val().length <= contentMax;
+					let isImagesVaild = $("#images")[0].files.length <= imagesMax;
+					
+					if (!isItemTbValid || !isItemIdVaild || !isUserIdVaild || !isUserIdVaild || !isImagesVaild ) {
+						e.preventDefault();					
+						isItemTbValid ? hideInvalidText($('#itemTb')) : showInvalidText($('#itemTb'));
+						isItemIdVaild ? hideInvalidText($('#itemId')) : showInvalidText($('#itemId'));
+						isUserIdVaild ? hideInvalidText($('#userId')) : showInvalidText($('#userId'));
+						isContentVaild ? hideInvalidText($('#content')) : showInvalidText($('#content'));
+						isImagesVaild ? hideInvalidText($('#images')) : showInvalidText($('#images'));
+						$("form").addClass('validated');
+					} else {
+						$('#btn-insert').submit();
+					}
+				});
+				
+				function showInvalidText(selector) {
+					selector.removeClass('is-valid').addClass('is-invalid');
+					selector.siblings('.invalid-feedback').css('display', 'block')
+				}
+				
+				function hideInvalidText(selector) {
+					selector.removeClass('is-invalid').addClass('is-valid');
+					selector.siblings('.invalid-feedback').css('display', 'none')
+				}
+				
+				$('#itemTb').on('change', function () {
+					if ($("form").hasClass('validated')) 
+						$('#itemTb').val() == null ? showInvalidText($('#itemTb')) : hideInvalidText($('#itemTb'))
+				})
+				
+				$('#itemId').keyup(function () {
+					if ($("form").hasClass('validated')) 
+						$('#itemId').val() == '' ? showInvalidText($('#itemId')) : hideInvalidText($('#itemId'))
+				})
+
+				$('#userId').keyup(function () {
+					if ($("form").hasClass('validated')) 
+						$('#userId').val() == '' ? showInvalidText($('#userId')) : hideInvalidText($('#userId'))
+				})
+				
+				// 顯示評論字數
+				$("#content").keyup(function(){
+					let contentLength = $("#content").val().length;
+				    $("#content-length").text('('+contentLength+'/'+contentMax+')');
+				    if (contentLength > contentMax) {
+				    	$('#content-length').removeClass('text-black-50').addClass('text-danger')
 				    } else {
-				        $("#imageUploadForm").submit();
-				        $('#invalid-length').text('')
-				        $('#files-length').removeClass('text-danger').addClass('text-black-50')
+					    $('#content-length').removeClass('text-danger').addClass('text-black-50')
+				    }
+				    if ($("form").hasClass('validated')) {
+				    	contentLength > contentMax ? showInvalidText($('#content')) : hideInvalidText($('#content'))				    	
 				    }
 				});
 				
-				// 限制評論字數
-				$("#content-text").keyup(function(){
-					let contentLength = $("#content-text").val().length;
-				    $("#content-length").text('('+contentLength+'/200)');
-				    if (contentLength > 200) {
-				    	$('#invalid-con-length').text('評論內容上限200字')
-				    	$('#content-length').removeClass('text-black-50').addClass('text-danger')
+				// 顯示上傳照片數量
+				$("#images").on("change", function() {
+					let imagesLength = $("#images")[0].files.length;
+					$('#images-length').text('('+imagesLength+'/'+ imagesMax +')')
+				    if (imagesLength > imagesMax) {
+				        $('#images-length').removeClass('text-black-50').addClass('text-danger')
 				    } else {
-				    	$('#invalid-con-length').text('')
-					    $('#content-length').removeClass('text-danger').addClass('text-black-50')
+				        $('#images-length').removeClass('text-danger').addClass('text-black-50')
 				    }
+					if ($("form").hasClass('validated')) {
+						imagesLength > imagesMax ? showInvalidText($('#images')) : hideInvalidText($('#images'))				    	
+				    } 
 				});
 
 				
@@ -304,7 +311,9 @@
 	                    	"select": "tickets"
 	                    },
 	                    success: function (data) {
+	                    	// 清空tbody內容
 	                    	$("tbody").html('');
+	                    	// ajax回傳資料放到tbody
 	                    	$.each(data, function (i) {
 	                    		let str = "<tr><td style='text-align: center'>行程</td>"+
 	                    				  "<td style='text-align: center'>"+data[i].prod_no+"</td>"+
@@ -312,25 +321,26 @@
 		                    			  "<td class='info' style='text-align:center'><i class='bi bi-info-square'></i></td></tr>";
 	                    		$("tbody").append(str)
 	                    	})
+	                    	// td on click 自動填入
 	        	        	$("td").on('click', function() {
-	        		        	let row = $(this).closest("tr");        
-	        		        	let item = $(row).find('td').eq(0).html();
-	        		        	let id = $(row).find('td').eq(1).html();
-	        		        	let name = $(row).find('td').eq(2).html();
-	        		            $("#item-id").val(id);
-	        		            if (item == "住宿") 
-	        		            	$("#tb-select").val("hotel")
-	        		            else if (item == "行程")
-	        		            	$("#tb-select").val("ticket")
+	        		        	let id = $(this).closest("tr").find('td').eq(1).html();
+	        		            $("#itemId").val(id);
+	        		            $("#itemTb").val("ticket")
+	        		            // form validation 設定更改
+	            		        if ($("form").hasClass('validated')) {
+	            		        	$('#itemTb').val() !== null ? hideInvalidText($('#itemTb')) : showInvalidText($('#itemTb'));
+	            		        	$('#itemId').val() !== '' ? hideInvalidText($('#itemId')) : showInvalidText($('#itemId'));
+	            		        }
 	        		        });
+	                    	// info on click 找該商品資訊
         		            $('.info').on('click', function() {
 	        		        	let row = $(this).closest("tr");        
 	        		        	let item = $(row).find('td').eq(0).html();
 	        		        	let id = $(row).find('td').eq(1).html();
         		            	popUpInfo(item, id);
         		            });
+	                    	
 	                    },
-	                    
 	                    error: function () {
 	                        console.log('error')
 	                    }
@@ -358,15 +368,14 @@
 	                    	})
                     		$("tbody").html(str);
 	        	        	$("td").on('click', function() {
-	        		        	let row = $(this).closest("tr");        
-	        		        	let item = $(row).find('td').eq(0).html();
-	        		        	let id = $(row).find('td').eq(1).html();
-	        		        	let name = $(row).find('td').eq(2).html();
-	        		            $("#item-id").val(id);
-	        		            if (item == "住宿") 
-	        		            	$("#tb-select").val("hotel")
-	        		            else if (item == "行程")
-	        		            	$("#tb-select").val("ticket")
+	        	        		let id = $(this).closest("tr").find('td').eq(1).html();
+	        		            $("#itemId").val(id);
+	        		            $("#itemTb").val("hotel")
+	        		            // form validation 設定更改
+	            		        if ($("form").hasClass('validated')) {
+	            		        	$('#itemTb').val() !== null ? hideInvalidText($('#itemTb')) : showInvalidText($('#itemTb'));
+	            		        	$('#itemId').val() !== '' ? hideInvalidText($('#itemId')) : showInvalidText($('#itemId'));
+	            		        }
 	        		        });
         		            $('.info').on('click', function() {
 	        		        	let row = $(this).closest("tr");        
@@ -382,29 +391,7 @@
 	                })
 				})
 	        	
-				
-				
-	        	$("td").on('click', function() {
-					showInfo()
-		        });
-				
-				function showInfo() {
-    		        let row = $(this).closest("tr");        
-    		        let item = $(row).find('td').eq(0).html();
-    		        let id = $(row).find('td').eq(1).html();
-    		        let name = $(row).find('td').eq(2).html();
-		        	inputValues(item, id);
-		        	popUpInfo(item, id);
-				}
-				
-				function inputValues(item, id) {
-		            if (item == "住宿") 
-		            	$("#tb-select").val("hotel")
-		            else if (item == "行程")
-		            	$("#tb-select").val("ticket")
-			        $("#item-id").val(id);
-				}
-				
+		
 				function popUpInfo(item, id) {
 				    $.ajax({
 				        type: 'POST',

@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,7 +106,7 @@ public class CommentServlet extends HttpServlet {
         Comment comment = new Comment();
         comment.setItemTb(request.getParameter("itemTb").trim());
         comment.setItemId(Integer.parseInt(request.getParameter("itemId")));
-        comment.setUserId(request.getParameter("userId"));
+        comment.setUserId(request.getParameter("userId").trim());
         comment.setRating(Integer.parseInt(request.getParameter("rating")));
         comment.setContent(request.getParameter("content").trim());
         // 以.getParts()將圖片檔以二進位制放到資料庫
@@ -129,13 +130,54 @@ public class CommentServlet extends HttpServlet {
 	public void processUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Comment comment = new Comment();
         comment.setComId(Integer.parseInt(request.getParameter("comId")));
-		comment.setItemTb(request.getParameter("itemTb"));
-        comment.setItemId(Integer.parseInt(request.getParameter("itemId")));
-        comment.setUserId(request.getParameter("userId"));
+        comment.setUserId(request.getParameter("userId").trim());
         comment.setRating(Integer.parseInt(request.getParameter("rating")));
-        comment.setContent(request.getParameter("content"));
-        commentDAO.update(comment);
-        request.setAttribute("comment", comment);
+        comment.setContent(request.getParameter("content").trim());
+        
+		String[] imagesFromDBArr = request.getParameterValues("imagesFromDB");
+
+        ArrayList<Part> parts = (ArrayList<Part>) request.getParts();
+        ArrayList<InputStream> images = new ArrayList<>();
+        InputStream is = null;
+        for (int i = 0; i < parts.size(); i++) {
+        	// ContentType()為image 
+        	if (parts.get(i).getContentType() != null && parts.get(i).getContentType().startsWith("image") ) {
+            	is = parts.get(i).getInputStream();
+            	images.add(is);
+        	}
+        }
+        comment.setImageBytes(images);
+        
+		if (imagesFromDBArr!= null || is != null) {
+			if (imagesFromDBArr!= null) {
+		        List<String> imagesFromDBList = Arrays.asList(imagesFromDBArr);
+		        if (imagesFromDBList.contains("image1")){
+		        	comment.setImage1(", image1=?");
+		        } else {
+		    		comment.setImage1("");
+		    	}
+		        if (imagesFromDBList.contains("image2")){
+		        	comment.setImage2(", image2=?");
+		        } else {
+		    		comment.setImage2("");
+		    	}		        
+		        if (imagesFromDBList.contains("image3")){
+		        	comment.setImage3(", image3=?");
+		        } else {
+		    		comment.setImage3("");
+		    	}
+				
+			} else {
+				comment.setImage1("");
+				comment.setImage2("");
+				comment.setImage3("");
+			}
+	        commentDAO.updateWithImgs(comment);
+	        
+		} else {
+			
+			commentDAO.update(comment);
+		}
         response.sendRedirect("comment");        
 	}
 	

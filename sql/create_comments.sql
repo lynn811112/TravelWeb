@@ -52,10 +52,17 @@ SELECT * FROM comments ORDER BY com_id;
 SELECT * FROM comments 
 WHERE com_id = 1
 
+SELECT image1, image2, image3 FROM comments WHERE com_id = 6;
+
+
 DELETE comments WHERE com_id = 17
 
-UPDATE comments SET image2 =null;
+UPDATE comments SET image2 = null
 WHERE com_id = 14
+
+UPDATE comments SET user_id='employee' WHERE com_id = 27;
+
+
 
 SELECT count(*) FROM comments;
 
@@ -71,3 +78,5 @@ SELECT 'hotel', 4, 2, getdate(), 4, 'upload pics',
 	   (Select BulkColumn FROM Openrowset( Bulk 'C:\iSpan\Code\TravelWeb\ref\lake.jpg', Single_Blob) as image), 
 	   (Select BulkColumn FROM Openrowset( Bulk 'C:\iSpan\Code\TravelWeb\ref\fall-min.jpg', Single_Blob) as image), 
 	   'y';
+
+UPDATE comments SET image2=(Select BulkColumn FROM Openrowset( Bulk 'C:\iSpan\Code\TravelWeb\ref\pizza.jpg', Single_Blob) as image) WHERE com_id = 6;
